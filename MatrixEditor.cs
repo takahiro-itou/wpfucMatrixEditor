@@ -20,9 +20,8 @@ namespace  WpfControl.Editor  {
 //    MatrixEditor  class
 //
 
-public  class  MatrixEditor
+public  class  MatrixEditor : MatrixDisplay
 {
-
 
 }   //  End class  MatrixEditor
 

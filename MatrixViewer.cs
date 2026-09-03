@@ -20,9 +20,8 @@ namespace  WpfControl.Editor  {
 //    MatrixViewer  class
 //
 
-public  class  MatrixViewer
+public  class  MatrixViewer : MatrixDisplay
 {
-
 
 }   //  End class  MatrixViewer
 
