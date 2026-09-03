@@ -12,6 +12,8 @@
 **                                                                      **
 *************************************************************************/
 
+using System.Windows.Media;
+
 
 namespace  WpfControl.Editor  {
 
@@ -28,6 +30,9 @@ namespace  WpfControl.Editor  {
 public  struct  MatrixCellData
 {
 
+public  System.String   Value { get; set; }
+public  Brush           Background { get; set; }
+public  Brush           ForeGround { get; set; }
 
 }   //  End class  MatrixCellData
 
