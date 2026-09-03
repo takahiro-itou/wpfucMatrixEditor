@@ -25,6 +25,45 @@ namespace  WpfControl.Editor  {
 public  class  MatrixDisplay : FrameworkElement
 {
 
+//========================================================================
+//
+//    Constructor(s) and Destructor.
+//
+
+
+//========================================================================
+//
+//    Properties.
+//
+
+
+//========================================================================
+//
+//    Protected Member Functions (Overrides).
+//
+
+//----------------------------------------------------------------
+/**   描画ロジック。
+**
+**  @param [in] dc    Drawing Context
+**/
+
+protected  override  void
+OnRender(System.Windows.Media.DrawingContext  dc)
+{
+}
+
+//========================================================================
+//
+//    For Internal Use Only.
+//
+
+//========================================================================
+//
+//    Member Variables.
+//
+
+
 }   //  End class  MatrixDisplay
 
 }   //  End of namespace  WpfControl.Editor
