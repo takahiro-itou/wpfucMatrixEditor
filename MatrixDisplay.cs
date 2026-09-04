@@ -65,6 +65,12 @@ ColumnsProperty = DependencyProperty.Register(
             0, FrameworkPropertyMetadataOptions.AffectsRender)
 );
 
+public  static  readonly  DependencyProperty
+MatrixDataProperty = DependencyProperty.Register(
+    nameof(MatrixData), typeof(int[]), typeof(MatrixDisplay),
+    new FrameworkPropertyMetadata(
+            0, FrameworkPropertyMetadataOptions.AffectsRender)
+);
 
 public  static  readonly  DependencyProperty
 RowsProperty = DependencyProperty.Register(
@@ -77,6 +83,11 @@ RowsProperty = DependencyProperty.Register(
 public  int  Columns  {
     get { return  (int)GetValue(ColumnsProperty); }
     set { SetValue(ColumnsProperty, value); }
+}
+
+public  int[]  MatrixData  {
+    get { return  (MatrixCellData[])GetValue(MatrixDataProperty); }
+    set { SetValue(MatrixDataProperty, value); }
 }
 
 public  int  Rows  {
