@@ -111,7 +111,37 @@ OnRender(System.Windows.Media.DrawingContext  dc)
     double fontSize = Math.Min(cellHeight * 0.5, 12);
 
     dc.DrawRectangle(
-            Brushes.Green, null, new Rect(0, 0, renderWidth, renderHeight));
+            Brushes.White, null, new Rect(0, 0, renderWidth, renderHeight));
+
+    for ( int r = 0; r < Rows; ++ r ) {
+        for ( int c = 0; c < Columns; ++ c ) {
+            int index = r * Columns + c;
+            double val = MatrixData[index];
+
+            //  セルの左上座標  //
+            double x = c * cellWidth;
+            double y = r * cellHeight;
+
+            dc.DrawRectangle(
+                     null, gridPen, new Rect(x, y, cellWidth, cellHeight));
+            FormattedText formattedText = new FormattedText(
+                    val.ToString("F2", CultureInfo.CurrentCulture),
+                    CultureInfo.CurrentCulture,
+                    FlowDirection.LeftToRight,
+                    typeface,
+                    fontSize,
+                    Brushes.Black,
+                    VisualTreeHelper.GetDpi(this).PixelsPerDip);
+            //  中央揃えの座標計算。    //
+            double textX = x + (cellWidth - formattedText.Width) / 2;
+            double textY = y + (cellHeight - formattedText.Height) / 2;
+
+            if ( formattedText.Width < cellWidth && formattedText.Height < cellHeight ) {
+                dc.DrawText(formattedText, new Point(textX, textY);
+            }
+        }
+    }
+
     return;
 }
 
