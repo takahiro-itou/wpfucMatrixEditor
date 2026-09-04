@@ -112,7 +112,7 @@ OnRender(System.Windows.Media.DrawingContext  dc)
     double fontSize = Math.Min(cellHeight * 0.5, 12);
 
     dc.DrawRectangle(
-            Brushes.Green, null, new Rect(0, 0, renderWidth, renderHeight);
+            Brushes.Green, null, new Rect(0, 0, renderWidth, renderHeight));
     return;
 }
 
