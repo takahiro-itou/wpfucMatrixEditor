@@ -48,7 +48,7 @@ public  static  readonly  DependencyProperty
 MatrixDataProperty = DependencyProperty.Register(
     nameof(MatrixData), typeof(int[]), typeof(MatrixDisplay),
     new FrameworkPropertyMetadata(
-            0, FrameworkPropertyMetadataOptions.AffectsRender)
+            null, FrameworkPropertyMetadataOptions.AffectsRender)
 );
 
 public  static  readonly  DependencyProperty
