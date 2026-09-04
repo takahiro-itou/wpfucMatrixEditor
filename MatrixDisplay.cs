@@ -12,6 +12,7 @@
 **                                                                      **
 *************************************************************************/
 
+using System.Globalization;
 using System.Windows;
 using System.Windows.Media;
 
@@ -137,7 +138,7 @@ OnRender(System.Windows.Media.DrawingContext  dc)
             double textY = y + (cellHeight - formattedText.Height) / 2;
 
             if ( formattedText.Width < cellWidth && formattedText.Height < cellHeight ) {
-                dc.DrawText(formattedText, new Point(textX, textY);
+                dc.DrawText(formattedText, new Point(textX, textY));
             }
         }
     }
