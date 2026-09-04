@@ -59,11 +59,25 @@ OnRender(System.Windows.Media.DrawingContext  dc)
 //
 
 public  static  readonly  DependencyProperty
+ColumnsProperty = DependencyProperty.Register(
+    nameof(Columns), typeof(int), typeof(MatrixDisplay),
+    new FrameworkPropertyMetadata(
+            0, FrameworkPropertyMetadataOptions.AffectsRender)
+);
+
+
+public  static  readonly  DependencyProperty
 RowsProperty = DependencyProperty.Register(
     nameof(Rows), typeof(int), typeof(MatrixDisplay),
     new FrameworkPropertyMetadata(
             0, FrameworkPropertyMetadataOptions.AffectsRender)
 );
+
+
+public  int  Columns  {
+    get { return  (int)GetValue(ColumnsProperty); }
+    set { SetValue(ColumnsProperty, value); }
+}
 
 public  int  Rows  {
     get { return  (int)GetValue(RowsProperty); }
