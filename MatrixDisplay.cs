@@ -64,7 +64,7 @@ public  int  Columns  {
 }
 
 public  int[]  MatrixData  {
-    get { return  (MatrixCellData[])GetValue(MatrixDataProperty); }
+    get { return  (int[])GetValue(MatrixDataProperty); }
     set { SetValue(MatrixDataProperty, value); }
 }
 
@@ -88,6 +88,32 @@ public  int  Rows  {
 protected  override  void
 OnRender(System.Windows.Media.DrawingContext  dc)
 {
+    base.OnRender(dc);
+
+    if ( this.MatrixData == null || Rows <= 0 || Columns <= 0) {
+        return;
+    }
+    if ( this.MatrixData.Length <= Rows * Columns ) {
+        return;
+    }
+
+    //  描画サイズを計算。  //
+    double renderWidth  = this.RenderSize.Width;
+    double renderHeight = this.RenderSize.Height;
+    double cellWidth    = renderWidth / Columns;
+    double cellHeight   = renderHeight / Rows;
+
+    Pen gridPen = new Pen(Brushes.LightGray, 0.5);
+    Typeface typeface = new Typeface(
+            SystemParameters.StaticCaptionFontFamily,
+            FontStyle.Normal,
+            FontWeights.Normal,
+            FontStretches.Normal);
+    double fontSize = Math.Min(cellHeight * 0.5, 12);
+
+    dc.DrawRectangle(
+            Brushes.Green, null, new Rect(0, 0, renderWidth, renderHeight);
+    return;
 }
 
 
