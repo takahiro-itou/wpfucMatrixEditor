@@ -65,6 +65,11 @@ RowsProperty = DependencyProperty.Register(
             0, FrameworkPropertyMetadataOptions.AffectsRender)
 );
 
+public  int  Rows  {
+    get { return  (int)GetValue(RowsProperty); }
+    set { SetValue(RowsProperty, value); }
+}
+
 
 //========================================================================
 //
