@@ -55,6 +55,19 @@ OnRender(System.Windows.Media.DrawingContext  dc)
 
 //========================================================================
 //
+//    Properties.
+//
+
+public  static  readonly  DependencyProperty
+RowsProperty = DependencyProperty.Register(
+    name(Rows), typeof(int), typeof(MatrixDisplay),
+    new FrameworkPropertyMetadata(
+            0, FrameworkPropertyMetadataOptions.AffectsRender)
+);
+
+
+//========================================================================
+//
 //    For Internal Use Only.
 //
 
