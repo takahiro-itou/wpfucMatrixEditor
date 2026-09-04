@@ -36,28 +36,6 @@ public  class  MatrixDisplay : FrameworkElement
 //    Properties.
 //
 
-
-//========================================================================
-//
-//    Protected Member Functions (Overrides).
-//
-
-//----------------------------------------------------------------
-/**   描画ロジック。
-**
-**  @param [in] dc    Drawing Context
-**/
-
-protected  override  void
-OnRender(System.Windows.Media.DrawingContext  dc)
-{
-}
-
-//========================================================================
-//
-//    Properties.
-//
-
 public  static  readonly  DependencyProperty
 ColumnsProperty = DependencyProperty.Register(
     nameof(Columns), typeof(int), typeof(MatrixDisplay),
@@ -93,6 +71,23 @@ public  int[]  MatrixData  {
 public  int  Rows  {
     get { return  (int)GetValue(RowsProperty); }
     set { SetValue(RowsProperty, value); }
+}
+
+
+//========================================================================
+//
+//    Protected Member Functions (Overrides).
+//
+
+//----------------------------------------------------------------
+/**   描画ロジック。
+**
+**  @param [in] dc    Drawing Context
+**/
+
+protected  override  void
+OnRender(System.Windows.Media.DrawingContext  dc)
+{
 }
 
 
