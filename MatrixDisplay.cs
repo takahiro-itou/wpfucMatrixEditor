@@ -106,8 +106,8 @@ OnRender(System.Windows.Media.DrawingContext  dc)
 
     Pen gridPen = new Pen(Brushes.LightGray, 0.5);
     Typeface typeface = new Typeface(
-            this.FontFamily, this.FontStyle, this.FontWeight,
-            this.FontStretch);
+            SystemFonts.CaptionFontFamily,
+            FontStyles.Normal,  FontWeights.Normal, FontStretches.Normal);
     double fontSize = Math.Min(cellHeight * 0.5, 12);
 
     dc.DrawRectangle(
