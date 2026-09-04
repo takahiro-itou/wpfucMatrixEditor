@@ -60,7 +60,7 @@ OnRender(System.Windows.Media.DrawingContext  dc)
 
 public  static  readonly  DependencyProperty
 RowsProperty = DependencyProperty.Register(
-    name(Rows), typeof(int), typeof(MatrixDisplay),
+    nameof(Rows), typeof(int), typeof(MatrixDisplay),
     new FrameworkPropertyMetadata(
             0, FrameworkPropertyMetadataOptions.AffectsRender)
 );
