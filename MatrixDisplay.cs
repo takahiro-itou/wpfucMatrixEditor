@@ -14,6 +14,7 @@
 
 using System.Globalization;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
 
 
@@ -45,7 +46,7 @@ setHorizontalOffset(double  offset)
     double value = Math.Max(0,
         Math.Min(offset, this.ExtentWidth - this.ViewportWidth));
     if ( this.m_offset.X != value ) {
-        this.m_offset.X = value; }
+        this.m_offset.X = value;
     }
 }
 
@@ -56,7 +57,7 @@ setVerticalOffset(
     double value = Math.Max(0,
         Math.Min(offset, this.ExtentHeight - this.ViewportHeight));
     if ( this.m_offset.Y != value ) {
-        this.m_offset.Y = value; }
+        this.m_offset.Y = value;
     }
 }
 
@@ -98,7 +99,7 @@ public  double  ExtentWidth  {
 }
 
 public  double  ExtentHeight  {
-    get { return  this.Rows * this.CellHeight;
+    get { return  this.Rows * this.CellHeight; }
 }
 
 public  int  Columns  {
@@ -106,7 +107,7 @@ public  int  Columns  {
     set { SetValue(ColumnsProperty, value); }
 }
 
-public  double  HorizontalOffet  {
+public  double  HorizontalOffset  {
     get { return  this.m_offset.X; }
 }
 
@@ -185,12 +186,12 @@ OnRender(System.Windows.Media.DrawingContext  dc)
             new Rect(0, 0, this.ViewportWidth, this.ViewportHeight));
 
     //  表示範囲を計算。    /
-    int startCol = Math.Max(0, (int)HorizontalOffset / CellWidth);
-    int startRow = Math.Max(0, (int)VerticalOffset / CellHeight);
+    int startCol = Math.Max(0, (int)(HorizontalOffset / CellWidth));
+    int startRow = Math.Max(0, (int)(VerticalOffset / CellHeight));
     int endCol = Math.Min(Columns - 1,
-            (int)((HorizontalOffet + ViewportWidth) / CellWidth) + 1);
+            (int)((HorizontalOffset + ViewportWidth) / CellWidth) + 1);
     int endRow = Math.Min(Rows - 1,
-            (int)((VerticalOffet + ViewportHeight) / CellHeight) + 1);
+            (int)((VerticalOffset + ViewportHeight) / CellHeight) + 1);
 
     Typeface typeface = new Typeface(
             SystemFonts.CaptionFontFamily,
@@ -198,14 +199,14 @@ OnRender(System.Windows.Media.DrawingContext  dc)
     double fontSize = 12;
     Pen gridPen = new Pen(Brushes.LightGray, 0.5);
 
-    for ( int r = startRow; r <= endRows; ++ r ) {
-        for ( int c = startCol; c <= endCol ++ c ) {
+    for ( int r = startRow; r <= endRow; ++ r ) {
+        for ( int c = startCol; c <= endCol; ++ c ) {
             int index = r * Columns + c;
             if ( index >= MatrixData.Length ) { continue; }
             double val = MatrixData[index];
 
             //  セルの左上座標  //
-            double x = (c * CellWidth) - HorizontalOffet;
+            double x = (c * CellWidth) - HorizontalOffset;
             double y = (r * CellHeight) - VerticalOffset;
 
             dc.DrawRectangle(
