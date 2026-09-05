@@ -147,7 +147,7 @@ updateInternalData()
 {
     if ( this.m_mdPart == null ) { return; }
 
-    if ( MatrixData is int[] rawArray ) {
+    if ( MatrixData is MatrixCellData[] rawArray ) {
         this.m_mdPart.MatrixData = rawArray;
     } else {
         this.m_mdPart.MatrixData = null;

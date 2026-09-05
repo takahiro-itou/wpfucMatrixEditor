@@ -60,8 +60,8 @@ public  int  Columns  {
     set { SetValue(ColumnsProperty, value); }
 }
 
-public  int[]  MatrixData  {
-    get { return  (int[])GetValue(MatrixDataProperty); }
+public  MatrixCellData[]  MatrixData  {
+    get { return  (MatrixCellData[])GetValue(MatrixDataProperty); }
     set { SetValue(MatrixDataProperty, value); }
 }
 
@@ -94,7 +94,7 @@ DependencyProperty.Register(
 
 public  static  readonly  DependencyProperty  MatrixDataProperty =
 DependencyProperty.Register(
-        nameof(MatrixData), typeof(int[]), typeof(MatrixDisplay),
+        nameof(MatrixData), typeof(MatrixCellData[]), typeof(MatrixDisplay),
         new FrameworkPropertyMetadata(null, AFFECTS_LAYOUT)
 );
 
@@ -154,21 +154,25 @@ OnRender(System.Windows.Media.DrawingContext  dc)
         for ( int c = startCol; c <= endCol; ++ c ) {
             int index = r * Columns + c;
             if ( index >= MatrixData.Length ) { continue; }
-            double val = MatrixData[index];
+            MatrixCellData  dat = MatrixData[index];
+            System.String   val = dat.Value;
 
             //  セルの左上座標  //
             double x = (c * CellWidth) - HorizontalOffset;
             double y = (r * CellHeight) - VerticalOffset;
 
+            Brush   fgBrush = dat.Background ?? Brushes.Black;
+            Brush   bgBrush = dat.Foreground ?? Brushes.White;
+
             dc.DrawRectangle(
                      null, gridPen, new Rect(x, y, CellWidth, CellHeight));
             FormattedText formattedText = new FormattedText(
-                    val.ToString("F2", CultureInfo.CurrentCulture),
+                    val,
                     CultureInfo.CurrentCulture,
                     FlowDirection.LeftToRight,
                     typeface,
                     fontSize,
-                    Brushes.Black,
+                    fgBrush,
                     VisualTreeHelper.GetDpi(this).PixelsPerDip);
             //  中央揃えの座標計算。    //
             double textX = x + (CellWidth - formattedText.Width) / 2;
