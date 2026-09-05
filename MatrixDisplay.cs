@@ -25,7 +25,7 @@ namespace  WpfControl.Editor  {
 //    MatrixDisplay  class
 //
 
-public  class  MatrixDisplay : FrameworkElement
+public  class  MatrixDisplay : WpfControl.Common.ScrollFrameworkElementBase
 {
 
 //========================================================================
@@ -39,66 +39,19 @@ public  class  MatrixDisplay : FrameworkElement
 //    Accessors.
 //
 
-
-public  void
-setHorizontalOffset(double  offset)
-{
-    double value = Math.Max(0,
-        Math.Min(offset, this.ExtentWidth - this.ViewportWidth));
-    if ( this.m_offset.X != value ) {
-        this.m_offset.X = value;
-    }
-}
-
-public  void
-setVerticalOffset(
-        double  offset)
-{
-    double value = Math.Max(0,
-        Math.Min(offset, this.ExtentHeight - this.ViewportHeight));
-    if ( this.m_offset.Y != value ) {
-        this.m_offset.Y = value;
-    }
-}
-
 //========================================================================
 //
 //    Properties.
 //
 
-public  static  readonly  DependencyProperty
-ColumnsProperty = DependencyProperty.Register(
-    nameof(Columns), typeof(int), typeof(MatrixDisplay),
-    new FrameworkPropertyMetadata(
-            0, FrameworkPropertyMetadataOptions.AffectsRender)
-);
-
-public  static  readonly  DependencyProperty
-MatrixDataProperty = DependencyProperty.Register(
-    nameof(MatrixData), typeof(int[]), typeof(MatrixDisplay),
-    new FrameworkPropertyMetadata(
-            null, FrameworkPropertyMetadataOptions.AffectsRender)
-);
-
-public  static  readonly  DependencyProperty
-RowsProperty = DependencyProperty.Register(
-    nameof(Rows), typeof(int), typeof(MatrixDisplay),
-    new FrameworkPropertyMetadata(
-            0, FrameworkPropertyMetadataOptions.AffectsRender)
-);
-
-
-public  bool    CanHorizontallyScrol { get; set; }
-public  bool    CanVerticallyScroll  { get; set; }
-
 public  double  CellWidth  { get; set; } = 60.0;
 public  double  CellHeight { get; set; } = 25.0;
 
-public  double  ExtentWidth  {
+public  override  double  ExtentWidth  {
     get { return  this.Columns * this.CellWidth; }
 }
 
-public  double  ExtentHeight  {
+public  override  double  ExtentHeight  {
     get { return  this.Rows * this.CellHeight; }
 }
 
@@ -107,36 +60,49 @@ public  int  Columns  {
     set { SetValue(ColumnsProperty, value); }
 }
 
-public  double  HorizontalOffset  {
-    get { return  this.m_offset.X; }
-}
-
-public  int[]  MatrixData  {
-    get { return  (int[])GetValue(MatrixDataProperty); }
+public  MatrixCellData[]  MatrixData  {
+    get { return  (MatrixCellData[])GetValue(MatrixDataProperty); }
     set { SetValue(MatrixDataProperty, value); }
 }
 
-public  ScrollViewer  ScrollOwner  {
-    get { return  this.m_scrollOwner; }
-    set { this.m_scrollOwner = value; }
-}
+
+public  override  double  SmallChangeX => CellWidth;
+
+public  override  double  SmallChangeY => CellHeight;
 
 public  int  Rows  {
     get { return  (int)GetValue(RowsProperty); }
     set { SetValue(RowsProperty, value); }
 }
 
-public  double  VerticalOffset  {
-    get { return  this.m_offset.Y; }
-}
+//========================================================================
+//
+//    Dependency Properties.
+//
 
-public  double  ViewportHeight  {
-    get { return  this.m_viewport.Height; }
-}
+private  const  FrameworkPropertyMetadataOptions
+AFFECTS_LAYOUT =
+        FrameworkPropertyMetadataOptions.AffectsMeasure |
+        FrameworkPropertyMetadataOptions.AffectsRender;
 
-public  double  ViewportWidth  {
-    get { return  this.m_viewport.Width; }
-}
+
+public  static  readonly  DependencyProperty  ColumnsProperty =
+DependencyProperty.Register(
+        nameof(Columns), typeof(int), typeof(MatrixDisplay),
+        new FrameworkPropertyMetadata(0, AFFECTS_LAYOUT)
+);
+
+public  static  readonly  DependencyProperty  MatrixDataProperty =
+DependencyProperty.Register(
+        nameof(MatrixData), typeof(MatrixCellData[]), typeof(MatrixDisplay),
+        new FrameworkPropertyMetadata(null, AFFECTS_LAYOUT)
+);
+
+public  static  readonly  DependencyProperty  RowsProperty =
+DependencyProperty.Register(
+        nameof(Rows), typeof(int), typeof(MatrixDisplay),
+        new FrameworkPropertyMetadata(0, AFFECTS_LAYOUT)
+);
 
 
 //========================================================================
@@ -144,21 +110,6 @@ public  double  ViewportWidth  {
 //    Protected Member Functions (Overrides).
 //
 
-//----------------------------------------------------------------
-/**
-**
-**/
-
-protected  override  Size
-MeasureOverride(
-        Size availableSize)
-{
-    if ( this.m_viewport != availableSize ) {
-        this.m_viewport = availableSize;
-        this.m_scrollOwner?.InvalidateScrollInfo();
-    }
-    return  availableSize;
-}
 
 //----------------------------------------------------------------
 /**   描画ロジック。
@@ -203,21 +154,25 @@ OnRender(System.Windows.Media.DrawingContext  dc)
         for ( int c = startCol; c <= endCol; ++ c ) {
             int index = r * Columns + c;
             if ( index >= MatrixData.Length ) { continue; }
-            double val = MatrixData[index];
+            MatrixCellData  dat = MatrixData[index];
+            System.String   val = dat.Value;
 
             //  セルの左上座標  //
             double x = (c * CellWidth) - HorizontalOffset;
             double y = (r * CellHeight) - VerticalOffset;
 
+            Brush   bgBrush = dat.Background ?? Brushes.White;
+            Brush   fgBrush = dat.Foreground ?? Brushes.Black;
+
             dc.DrawRectangle(
-                     null, gridPen, new Rect(x, y, CellWidth, CellHeight));
+                     bgBrush, gridPen, new Rect(x, y, CellWidth, CellHeight));
             FormattedText formattedText = new FormattedText(
-                    val.ToString("F2", CultureInfo.CurrentCulture),
+                    val,
                     CultureInfo.CurrentCulture,
                     FlowDirection.LeftToRight,
                     typeface,
                     fontSize,
-                    Brushes.Black,
+                    fgBrush,
                     VisualTreeHelper.GetDpi(this).PixelsPerDip);
             //  中央揃えの座標計算。    //
             double textX = x + (CellWidth - formattedText.Width) / 2;
@@ -236,22 +191,11 @@ OnRender(System.Windows.Media.DrawingContext  dc)
 //    For Internal Use Only.
 //
 
-private  void
-invalidated()
-{
-    this.m_scrollOwner?.InvalidateScrollInfo();
-    this.InvalidateVisual();
-}
-
 
 //========================================================================
 //
 //    Member Variables.
 //
-
-private   Size              m_viewport  = new Size(0, 0);
-private   Point             m_offset    = new Point(0, 0);
-private   ScrollViewer?     m_scrollOwner;
 
 
 }   //  End class  MatrixDisplay

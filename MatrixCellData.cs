@@ -31,8 +31,8 @@ public  struct  MatrixCellData
 {
 
 public  System.String   Value { get; set; }
-public  Brush           Background { get; set; }
-public  Brush           ForeGround { get; set; }
+public  Brush?          Background { get; set; }
+public  Brush?          Foreground { get; set; }
 
 }   //  End class  MatrixCellData
 
