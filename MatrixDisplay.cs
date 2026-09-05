@@ -39,33 +39,10 @@ public  class  MatrixDisplay : WpfControl.Common.ScrollFrameworkElementBase
 //    Accessors.
 //
 
-
 //========================================================================
 //
 //    Properties.
 //
-
-public  static  readonly  DependencyProperty
-ColumnsProperty = DependencyProperty.Register(
-    nameof(Columns), typeof(int), typeof(MatrixDisplay),
-    new FrameworkPropertyMetadata(
-            0, FrameworkPropertyMetadataOptions.AffectsRender)
-);
-
-public  static  readonly  DependencyProperty
-MatrixDataProperty = DependencyProperty.Register(
-    nameof(MatrixData), typeof(int[]), typeof(MatrixDisplay),
-    new FrameworkPropertyMetadata(
-            null, FrameworkPropertyMetadataOptions.AffectsRender)
-);
-
-public  static  readonly  DependencyProperty
-RowsProperty = DependencyProperty.Register(
-    nameof(Rows), typeof(int), typeof(MatrixDisplay),
-    new FrameworkPropertyMetadata(
-            0, FrameworkPropertyMetadataOptions.AffectsRender)
-);
-
 
 public  double  CellWidth  { get; set; } = 60.0;
 public  double  CellHeight { get; set; } = 25.0;
@@ -97,6 +74,32 @@ public  int  Rows  {
     get { return  (int)GetValue(RowsProperty); }
     set { SetValue(RowsProperty, value); }
 }
+
+//========================================================================
+//
+//    Dependency Properties.
+//
+
+public  static  readonly  DependencyProperty  ColumnsProperty =
+DependencyProperty.Register(
+    nameof(Columns), typeof(int), typeof(MatrixDisplay),
+    new FrameworkPropertyMetadata(
+            0, FrameworkPropertyMetadataOptions.AffectsRender)
+);
+
+public  static  readonly  DependencyProperty  MatrixDataProperty =
+DependencyProperty.Register(
+    nameof(MatrixData), typeof(int[]), typeof(MatrixDisplay),
+    new FrameworkPropertyMetadata(
+            null, FrameworkPropertyMetadataOptions.AffectsRender)
+);
+
+public  static  readonly  DependencyProperty  RowsProperty =
+DependencyProperty.Register(
+    nameof(Rows), typeof(int), typeof(MatrixDisplay),
+    new FrameworkPropertyMetadata(
+            0, FrameworkPropertyMetadataOptions.AffectsRender)
+);
 
 
 //========================================================================
