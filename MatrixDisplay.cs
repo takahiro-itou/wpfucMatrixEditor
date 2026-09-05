@@ -80,25 +80,28 @@ public  int  Rows  {
 //    Dependency Properties.
 //
 
+private  const  FrameworkPropertyMetadataOptions
+AFFECTS_LAYOUT =
+        FrameworkPropertyMetadataOptions.AffectsMeasure |
+        FrameworkPropertyMetadataOptions.AffectsRender;
+
+
 public  static  readonly  DependencyProperty  ColumnsProperty =
 DependencyProperty.Register(
-    nameof(Columns), typeof(int), typeof(MatrixDisplay),
-    new FrameworkPropertyMetadata(
-            0, FrameworkPropertyMetadataOptions.AffectsRender)
+        nameof(Columns), typeof(int), typeof(MatrixDisplay),
+        new FrameworkPropertyMetadata(0, AFFECTS_LAYOUT)
 );
 
 public  static  readonly  DependencyProperty  MatrixDataProperty =
 DependencyProperty.Register(
-    nameof(MatrixData), typeof(int[]), typeof(MatrixDisplay),
-    new FrameworkPropertyMetadata(
-            null, FrameworkPropertyMetadataOptions.AffectsRender)
+        nameof(MatrixData), typeof(int[]), typeof(MatrixDisplay),
+        new FrameworkPropertyMetadata(null, AFFECTS_LAYOUT)
 );
 
 public  static  readonly  DependencyProperty  RowsProperty =
 DependencyProperty.Register(
-    nameof(Rows), typeof(int), typeof(MatrixDisplay),
-    new FrameworkPropertyMetadata(
-            0, FrameworkPropertyMetadataOptions.AffectsRender)
+        nameof(Rows), typeof(int), typeof(MatrixDisplay),
+        new FrameworkPropertyMetadata(0, AFFECTS_LAYOUT)
 );
 
 

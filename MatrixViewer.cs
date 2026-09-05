@@ -98,8 +98,8 @@ public  ScrollBarVisibility  VerticalScrollBarVisibility  {
 
 public  static  readonly  DependencyProperty  ColumnsProperty =
 DependencyProperty.Register(
-    nameof(Columns), typeof(int), typeof(MatrixViewer),
-    new FrameworkPropertyMetadata(0)
+        nameof(Columns), typeof(int), typeof(MatrixViewer),
+        new FrameworkPropertyMetadata(0)
 );
 
 public  static  readonly  DependencyProperty
@@ -110,14 +110,14 @@ ScrollViewer.HorizontalScrollBarVisibilityProperty.AddOwner(
 
 public  static  readonly  DependencyProperty  MatrixDataProperty =
 DependencyProperty.Register(
-    nameof(MatrixData), typeof(IList), typeof(MatrixViewer),
-    new FrameworkPropertyMetadata(null, OnMatrixDataChanged)
+        nameof(MatrixData), typeof(IList), typeof(MatrixViewer),
+        new FrameworkPropertyMetadata(null, OnMatrixDataChanged)
 );
 
 public  static  readonly  DependencyProperty  RowsProperty =
 DependencyProperty.Register(
-    nameof(Rows), typeof(int), typeof(MatrixViewer),
-    new FrameworkPropertyMetadata(0)
+        nameof(Rows), typeof(int), typeof(MatrixViewer),
+        new FrameworkPropertyMetadata(0)
 );
 
 public  static  readonly  DependencyProperty
