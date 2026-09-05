@@ -161,11 +161,11 @@ OnRender(System.Windows.Media.DrawingContext  dc)
             double x = (c * CellWidth) - HorizontalOffset;
             double y = (r * CellHeight) - VerticalOffset;
 
-            Brush   fgBrush = dat.Background ?? Brushes.Black;
-            Brush   bgBrush = dat.Foreground ?? Brushes.White;
+            Brush   bgBrush = dat.Background ?? Brushes.White;
+            Brush   fgBrush = dat.Foreground ?? Brushes.Black;
 
             dc.DrawRectangle(
-                     null, gridPen, new Rect(x, y, CellWidth, CellHeight));
+                     bgBrush, gridPen, new Rect(x, y, CellWidth, CellHeight));
             FormattedText formattedText = new FormattedText(
                     val,
                     CultureInfo.CurrentCulture,
