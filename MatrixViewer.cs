@@ -12,6 +12,7 @@
 **                                                                      **
 *************************************************************************/
 
+using   System.Collections;
 using   System.Windows;
 using   System.Windows.Controls;
 
@@ -46,6 +47,21 @@ static  MatrixViewer()
 
 //========================================================================
 //
+//    Public Member Functions.
+//
+
+public  override  void
+OnApplyTemplate()
+{
+    base.OnApplyTemplate();
+
+    this.m_mdPart = GetTemplateChild("PART_MatrixDisplay") as MatrixDisplay;
+    updateInternalData();
+}
+
+
+//========================================================================
+//
 //    Properties.
 //
 
@@ -54,8 +70,8 @@ public  int  Columns  {
     set { SetValue(ColumnsProperty, value); }
 }
 
-public  int[]  MatrixData  {
-    get { return  (int[])GetValue(MatrixDataProperty); }
+public  IList  MatrixData  {
+    get { return  (IList)GetValue(MatrixDataProperty); }
     set { SetValue(MatrixDataProperty, value); }
 }
 
@@ -78,8 +94,8 @@ DependencyProperty.Register(
 
 public  static  readonly  DependencyProperty  MatrixDataProperty =
 DependencyProperty.Register(
-    nameof(MatrixData), typeof(int[]), typeof(MatrixViewer),
-    new FrameworkPropertyMetadata(null)
+    nameof(MatrixData), typeof(IList), typeof(MatrixViewer),
+    new FrameworkPropertyMetadata(null, OnMatrixDataChanged)
 );
 
 public  static  readonly  DependencyProperty  RowsProperty =
@@ -88,6 +104,40 @@ DependencyProperty.Register(
     new FrameworkPropertyMetadata(0)
 );
 
+//========================================================================
+//
+//    For Internal Use Only.
+//
+
+private  static  void
+OnMatrixDataChanged(
+        DependencyObject                    d,
+        DependencyPropertyChangedEventArgs  e)
+{
+    if ( d is MatrixViewer owner ) {
+        owner.updateInternalData();
+    }
+}
+
+private  void
+updateInternalData()
+{
+    if ( this.m_mdPart == null ) { return; }
+
+    if ( MatrixData is int[] rawArray ) {
+        this.m_mdPart.MatrixData = rawArray;
+    } else {
+        this.m_mdPart.MatrixData = null;
+    }
+}
+
+
+//========================================================================
+//
+//    Member Variables.
+//
+
+private   MatrixDisplay     m_mdPart;
 
 
 }   //  End class  MatrixViewer

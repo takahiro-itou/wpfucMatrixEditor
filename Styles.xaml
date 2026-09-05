@@ -6,18 +6,20 @@
 >
   <!--  MatrixViewer  -->
   <Style TargetType="{x:Type editor:MatrixViewer}">
-    <Setter Property "Template">
+    <Setter Property="Template">
       <Setter.Value>
         <ControlTemplate TargetType="{x:Type editor:MatrixViewer}">
           <ScrollViewer
               CanContentScroll="True"
-              HorizontalScrollBarVisibility="{TemplateBinding HorizontalScrollBarVisibility}"
-              VerticalScrollBarVisibility="{TemplateBinding VerticalScrollBarVisibility}"
-          />
+          >
             <editor:MatrixDisplay
+                x:Name="PART_MatrixDisplay"
+                Columns="{Binding Columns, RelativeSource={RelativeSource TemplatedParent}}"
+                Rows="{Binding Rows, RelativeSource={RelativeSource TemplatedParent}}"
             />
           </ScrollViewer>
         </ControlTemplate>
+      </Setter.Value>
     </Setter>
   </Style>
 
