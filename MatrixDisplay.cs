@@ -25,7 +25,7 @@ namespace  WpfControl.Editor  {
 //    MatrixDisplay  class
 //
 
-public  class  MatrixDisplay : FrameworkElement
+public  class  MatrixDisplay : WpfControl.Common.ScrollFrameworkElementBase
 {
 
 //========================================================================
