@@ -40,27 +40,6 @@ public  class  MatrixDisplay : WpfControl.Common.ScrollFrameworkElementBase
 //
 
 
-public  void
-setHorizontalOffset(double  offset)
-{
-    double value = Math.Max(0,
-        Math.Min(offset, this.ExtentWidth - this.ViewportWidth));
-    if ( this.m_offset.X != value ) {
-        this.m_offset.X = value;
-    }
-}
-
-public  void
-setVerticalOffset(
-        double  offset)
-{
-    double value = Math.Max(0,
-        Math.Min(offset, this.ExtentHeight - this.ViewportHeight));
-    if ( this.m_offset.Y != value ) {
-        this.m_offset.Y = value;
-    }
-}
-
 //========================================================================
 //
 //    Properties.
@@ -88,27 +67,20 @@ RowsProperty = DependencyProperty.Register(
 );
 
 
-public  bool    CanHorizontallyScrol { get; set; }
-public  bool    CanVerticallyScroll  { get; set; }
-
 public  double  CellWidth  { get; set; } = 60.0;
 public  double  CellHeight { get; set; } = 25.0;
 
-public  double  ExtentWidth  {
+public  override  double  ExtentWidth  {
     get { return  this.Columns * this.CellWidth; }
 }
 
-public  double  ExtentHeight  {
+public  override  double  ExtentHeight  {
     get { return  this.Rows * this.CellHeight; }
 }
 
 public  int  Columns  {
     get { return  (int)GetValue(ColumnsProperty); }
     set { SetValue(ColumnsProperty, value); }
-}
-
-public  double  HorizontalOffset  {
-    get { return  this.m_offset.X; }
 }
 
 public  int[]  MatrixData  {
@@ -121,21 +93,13 @@ public  ScrollViewer  ScrollOwner  {
     set { this.m_scrollOwner = value; }
 }
 
+public  override  SmallChangeX => CellWidth;
+
+public  override  SmallChangeY => CellHeight;
+
 public  int  Rows  {
     get { return  (int)GetValue(RowsProperty); }
     set { SetValue(RowsProperty, value); }
-}
-
-public  double  VerticalOffset  {
-    get { return  this.m_offset.Y; }
-}
-
-public  double  ViewportHeight  {
-    get { return  this.m_viewport.Height; }
-}
-
-public  double  ViewportWidth  {
-    get { return  this.m_viewport.Width; }
 }
 
 
@@ -144,21 +108,6 @@ public  double  ViewportWidth  {
 //    Protected Member Functions (Overrides).
 //
 
-//----------------------------------------------------------------
-/**
-**
-**/
-
-protected  override  Size
-MeasureOverride(
-        Size availableSize)
-{
-    if ( this.m_viewport != availableSize ) {
-        this.m_viewport = availableSize;
-        this.m_scrollOwner?.InvalidateScrollInfo();
-    }
-    return  availableSize;
-}
 
 //----------------------------------------------------------------
 /**   描画ロジック。
@@ -249,9 +198,8 @@ invalidated()
 //    Member Variables.
 //
 
-private   Size              m_viewport  = new Size(0, 0);
-private   Point             m_offset    = new Point(0, 0);
-private   ScrollViewer?     m_scrollOwner;
+//private   Point             m_offset    = new Point(0, 0);
+//private   ScrollViewer?     m_scrollOwner;
 
 
 }   //  End class  MatrixDisplay
