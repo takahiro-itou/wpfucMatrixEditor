@@ -11,6 +11,8 @@
         <ControlTemplate TargetType="{x:Type editor:MatrixViewer}">
           <ScrollViewer
               CanContentScroll="True"
+              HorizontalScrollBarVisibility="{TemplateBinding HorizontalScrollBarVisibility}"
+              VerticalScrollBarVisibility="{TemplateBinding VerticalScrollBarVisibility}"
           >
             <editor:MatrixDisplay
                 x:Name="PART_MatrixDisplay"
