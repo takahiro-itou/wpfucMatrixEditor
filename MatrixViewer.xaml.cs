@@ -12,6 +12,9 @@
 **                                                                      **
 *************************************************************************/
 
+using   System.Windows;
+using   System.Windows.Controls;
+
 
 namespace  WpfControl.Editor  {
 
@@ -20,8 +23,24 @@ namespace  WpfControl.Editor  {
 //    MatrixViewer  class
 //
 
-public  class  MatrixViewer : MatrixDisplay
+public  partial  class  MatrixViewer : UserControl
 {
+
+//========================================================================
+//
+//    Constructor(s) and Destructor.
+//
+
+//----------------------------------------------------------------
+/**   コンストラクタ。
+**
+**/
+
+public  MatrixViewer()
+{
+    InitializeComponent();
+}
+
 
 }   //  End class  MatrixViewer
 
