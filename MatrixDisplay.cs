@@ -88,10 +88,6 @@ public  int[]  MatrixData  {
     set { SetValue(MatrixDataProperty, value); }
 }
 
-public  ScrollViewer  ScrollOwner  {
-    get { return  this.m_scrollOwner; }
-    set { this.m_scrollOwner = value; }
-}
 
 public  override  double  SmallChangeX => CellWidth;
 
@@ -184,13 +180,6 @@ OnRender(System.Windows.Media.DrawingContext  dc)
 //
 //    For Internal Use Only.
 //
-
-private  void
-invalidated()
-{
-    this.m_scrollOwner?.InvalidateScrollInfo();
-    this.InvalidateVisual();
-}
 
 
 //========================================================================
