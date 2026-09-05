@@ -23,7 +23,7 @@ namespace  WpfControl.Editor  {
 //    MatrixViewer  class
 //
 
-public  partial  class  MatrixViewer : UserControl
+public  class  MatrixViewer : Control
 {
 
 //========================================================================
@@ -38,7 +38,9 @@ public  partial  class  MatrixViewer : UserControl
 
 public  MatrixViewer()
 {
-    InitializeComponent();
+    DefaultStyleKeyProperty.OverrideMetadata(
+        typeof(MatrixViewer),
+        new FrameworkPropertyMetadata(typeof(MatrixViewer)));
 }
 
 
