@@ -93,9 +93,9 @@ public  ScrollViewer  ScrollOwner  {
     set { this.m_scrollOwner = value; }
 }
 
-public  override  SmallChangeX => CellWidth;
+public  override  double  SmallChangeX => CellWidth;
 
-public  override  SmallChangeY => CellHeight;
+public  override  double  SmallChangeY => CellHeight;
 
 public  int  Rows  {
     get { return  (int)GetValue(RowsProperty); }
@@ -197,9 +197,6 @@ invalidated()
 //
 //    Member Variables.
 //
-
-//private   Point             m_offset    = new Point(0, 0);
-//private   ScrollViewer?     m_scrollOwner;
 
 
 }   //  End class  MatrixDisplay
