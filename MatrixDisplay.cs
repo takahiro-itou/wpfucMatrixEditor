@@ -44,8 +44,8 @@ public  class  MatrixDisplay : WpfControl.Common.ScrollFrameworkElementBase
 //    Properties.
 //
 
-public  double  CellWidth  { get; set; } = 60.0;
-public  double  CellHeight { get; set; } = 25.0;
+public  double  DefaultCellWidth  { get; set; } = 60.0;
+public  double  DefaultCellHeight { get; set; } = 25.0;
 
 public  override  double  ExtentWidth  {
     get { return  this.m_totalWidth; }
@@ -71,9 +71,9 @@ public  MatrixCellData[]?  MatrixData  {
 }
 
 
-public  override  double  SmallChangeX => CellWidth;
+public  override  double  SmallChangeX => DefaultCellWidth;
 
-public  override  double  SmallChangeY => CellHeight;
+public  override  double  SmallChangeY => DefaultCellHeight;
 
 
 public  IList<double>  RowHeights  {
@@ -197,7 +197,7 @@ OnRender(System.Windows.Media.DrawingContext  dc)
         double  absoluteY = this.m_rowPos[r];
         double  y = absoluteY - VerticalOffset;
         double  cellHeight  = (RowHeights != null && r < RowHeights.Count)
-                    ? RowHeights[r] : CellHeight;
+                    ? RowHeights[r] : DefaultCellHeight;
 
         for ( int c = startCol; c <= endCol; ++ c ) {
             int index = r * Columns + c;
@@ -210,7 +210,7 @@ OnRender(System.Windows.Media.DrawingContext  dc)
             double  absoluteX = this.m_colPos[c];
             double  x = absoluteX - HorizontalOffset;
             double  cellWidth = (ColumnWidths != null && c < ColumnWidths.Count)
-                    ? ColumnWidths[c] : CellWidth;
+                    ? ColumnWidths[c] : DefaultCellWidth;
 
             Brush   bgBrush = dat.Background ?? Brushes.White;
             Brush   fgBrush = dat.Foreground ?? Brushes.Black;
@@ -307,7 +307,7 @@ updateColumnPositions()
     for ( int c = 0; c < this.Columns; ++ c ) {
         this.m_colPos.Add(current);
         double  w = (ColumnWidths != null && c < ColumnWidths.Count) ?
-                    ColumnWidths[c] : CellWidth;
+                    ColumnWidths[c] : DefaultCellWidth;
         current += w;
     }
     this.m_totalWidth   = current;
@@ -323,7 +323,7 @@ updateRowPositions()
     for ( int r = 0; r < numRows; ++ r ) {
         this.m_rowPos.Add(current);
         double  h = (RowHeights != null && r < RowHeights.Count) ?
-                    RowHeights[r] : CellHeight;
+                    RowHeights[r] : DefaultCellHeight;
         current += h;
     }
     this.m_totalHeight  = current;
