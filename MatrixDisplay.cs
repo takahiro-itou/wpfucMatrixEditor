@@ -60,8 +60,8 @@ public  int  Columns  {
     set { SetValue(ColumnsProperty, value); }
 }
 
-public  MatrixCellData[]  MatrixData  {
-    get { return  (MatrixCellData[])GetValue(MatrixDataProperty); }
+public  MatrixCellData[]?  MatrixData  {
+    get { return  (MatrixCellData[]?)GetValue(MatrixDataProperty); }
     set { SetValue(MatrixDataProperty, value); }
 }
 

@@ -160,7 +160,7 @@ updateInternalData()
 //    Member Variables.
 //
 
-private   MatrixDisplay     m_mdPart;
+private   MatrixDisplay?    m_mdPart;
 
 
 }   //  End class  MatrixViewer
