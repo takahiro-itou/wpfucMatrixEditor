@@ -182,12 +182,10 @@ OnRender(System.Windows.Media.DrawingContext  dc)
             new Rect(0, 0, this.ViewportWidth, this.ViewportHeight));
 
     //  表示範囲を計算。    /
-    int startCol = Math.Max(0, (int)(HorizontalOffset / CellWidth));
-    int startRow = Math.Max(0, (int)(VerticalOffset / CellHeight));
-    int endCol = Math.Min(Columns - 1,
-            (int)((HorizontalOffset + ViewportWidth) / CellWidth) + 1);
-    int endRow = Math.Min(Rows - 1,
-            (int)((VerticalOffset + ViewportHeight) / CellHeight) + 1);
+    int startCol = getColumnIndexAtX(HorizontalOffset);
+    int startRow = getRowIndexAtY(VerticalOffset);
+    int endCol  = getColumnIndexAtX(HorizontalOffset + ViewportWidth);
+    int endRow  = getRowIndexAtY(VerticalOffset + ViewportHeight);
 
     Typeface typeface = new Typeface(
             SystemFonts.CaptionFontFamily,
@@ -196,21 +194,30 @@ OnRender(System.Windows.Media.DrawingContext  dc)
     Pen gridPen = new Pen(Brushes.LightGray, 0.5);
 
     for ( int r = startRow; r <= endRow; ++ r ) {
+        double  absoluteY = this.m_rowPos[r];
+        double  y = absoluteY - VerticalOffset;
+        double  cellHeight  = (RowHeights != null && r < RowHeights.Count)
+                    ? RowHeights[r] : CellHeight;
+
         for ( int c = startCol; c <= endCol; ++ c ) {
             int index = r * Columns + c;
             if ( index >= MatrixData.Length ) { continue; }
+
             MatrixCellData  dat = MatrixData[index];
             System.String   val = dat.Value;
 
             //  セルの左上座標  //
-            double x = (c * CellWidth) - HorizontalOffset;
-            double y = (r * CellHeight) - VerticalOffset;
+            double  absoluteX = this.m_colPos[c];
+            double  x = absoluteX - HorizontalOffset;
+            double  cellWidth = (ColumnWidths != null && c < ColumnWidths.Count)
+                    ? ColumnWidths[c] : CellWidth;
 
             Brush   bgBrush = dat.Background ?? Brushes.White;
             Brush   fgBrush = dat.Foreground ?? Brushes.Black;
 
             dc.DrawRectangle(
-                     bgBrush, gridPen, new Rect(x, y, CellWidth, CellHeight));
+                     bgBrush, gridPen,
+                     new Rect(x, y, cellWidth, cellHeight));
             FormattedText formattedText = new FormattedText(
                     val,
                     CultureInfo.CurrentCulture,
@@ -220,8 +227,8 @@ OnRender(System.Windows.Media.DrawingContext  dc)
                     fgBrush,
                     VisualTreeHelper.GetDpi(this).PixelsPerDip);
             //  中央揃えの座標計算。    //
-            double textX = x + (CellWidth - formattedText.Width) / 2;
-            double textY = y + (CellHeight - formattedText.Height) / 2;
+            double textX = x + (cellWidth - formattedText.Width) / 2;
+            double textY = y + (cellHeight - formattedText.Height) / 2;
             dc.DrawText(formattedText, new Point(textX, textY));
         }
     }
@@ -236,6 +243,39 @@ OnRender(System.Windows.Media.DrawingContext  dc)
 //    For Internal Use Only.
 //
 
+//----------------------------------------------------------------
+/**
+**
+**/
+
+private  static  int
+getIndexFromCache(
+        List<double>    posCache,
+        double          val,
+        int             num)
+{
+    if ( posCache.Count == 0 ) { return 0; }
+    int index = posCache.BinarySearch(val);
+    if ( index < 0 ) {
+        //  ぴったり一致しない場合は手前の要素を取る。  //
+        index = ~index - 1;
+    }
+    return  Math.Max(0, Math.Min(index, num - 1));
+}
+
+private  int
+getColumnIndexAtX(double  x)
+{
+    return  getIndexFromCache(this.m_colPos, x, this.Columns);
+}
+
+private  int
+getRowIndexAtY(double  y)
+{
+    return  getIndexFromCache(this.m_rowPos, y, this.Rows);
+}
+
+
 private  static  void
 OnColumnWidthsChanged(
         DependencyObject                    d,
@@ -249,7 +289,9 @@ OnRowHeightsChanged(
         DependencyObject                    d,
         DependencyPropertyChangedEventArgs  e)
 {
+    ((MatrixDisplay)d).updateRowPositions();
 }
+
 
 //----------------------------------------------------------------
 /**
