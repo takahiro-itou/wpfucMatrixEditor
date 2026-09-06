@@ -17,6 +17,8 @@
             <editor:MatrixDisplay
                 x:Name="PART_MatrixDisplay"
                 Columns="{Binding Columns, RelativeSource={RelativeSource TemplatedParent}}"
+                ColumnWidths="{Binding ColumnWidths, RelativeSource={RelativeSource TemplatedParent}}"
+                RowHeights="{Binding RowHeights, RelativeSource={RelativeSource TemplatedParent}}"
                 Rows="{Binding Rows, RelativeSource={RelativeSource TemplatedParent}}"
             />
           </ScrollViewer>
