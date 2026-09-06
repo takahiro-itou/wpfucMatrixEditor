@@ -60,6 +60,11 @@ public  int  Columns  {
     set { SetValue(ColumnsProperty, value); }
 }
 
+public  IList<double>  ColumnWidths  {
+    get { return  (IList<double>)GetValue(ColumnWidthsProperty); }
+    set { SetValue(ColumnWidthsProperty, value); }
+}
+
 public  MatrixCellData[]?  MatrixData  {
     get { return  (MatrixCellData[]?)GetValue(MatrixDataProperty); }
     set { SetValue(MatrixDataProperty, value); }
@@ -69,6 +74,12 @@ public  MatrixCellData[]?  MatrixData  {
 public  override  double  SmallChangeX => CellWidth;
 
 public  override  double  SmallChangeY => CellHeight;
+
+
+public  IList<double>  RowHeights  {
+    get { return  (IList<double>)GetValue(RowHeightsProperty); }
+    set { SetValue(RowHeightsProperty, value); }
+}
 
 public  int  Rows  {
     get { return  (int)GetValue(RowsProperty); }
@@ -92,10 +103,24 @@ DependencyProperty.Register(
         new FrameworkPropertyMetadata(0, AFFECTS_LAYOUT)
 );
 
+public  static  readonly  DependencyProperty  ColumnWidthsProperty =
+DependencyProperty.Register(
+        nameof(ColumnWidths), typeof(IList<double>), typeof(MatrixDisplay),
+        new FrameworkPropertyMetadata(
+                null, AFFECTS_LAYOUT, OnColumnWidthsChanged)
+);
+
 public  static  readonly  DependencyProperty  MatrixDataProperty =
 DependencyProperty.Register(
         nameof(MatrixData), typeof(MatrixCellData[]), typeof(MatrixDisplay),
         new FrameworkPropertyMetadata(null, AFFECTS_LAYOUT)
+);
+
+public  static  readonly  DependencyProperty  RowHeightsProperty =
+DependencyProperty.Register(
+        nameof(RowHeights), typeof(IList<double>), typeof(MatrixDisplay),
+        new FrameworkPropertyMetadata(
+                null, AFFECTS_LAYOUT, OnRowHeightsChanged)
 );
 
 public  static  readonly  DependencyProperty  RowsProperty =
@@ -190,6 +215,20 @@ OnRender(System.Windows.Media.DrawingContext  dc)
 //
 //    For Internal Use Only.
 //
+
+private  static  void
+OnColumnWidthsChanged(
+        DependencyObject                    d,
+        DependencyPropertyChangedEventArgs  e)
+{
+}
+
+private  static  void
+OnRowHeightsChanged(
+        DependencyObject                    d,
+        DependencyPropertyChangedEventArgs  e)
+{
+}
 
 
 //========================================================================
