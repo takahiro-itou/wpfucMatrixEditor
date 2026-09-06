@@ -48,11 +48,11 @@ public  double  CellWidth  { get; set; } = 60.0;
 public  double  CellHeight { get; set; } = 25.0;
 
 public  override  double  ExtentWidth  {
-    get { return  this.Columns * this.CellWidth; }
+    get { return  this.m_totalWidth; }
 }
 
 public  override  double  ExtentHeight  {
-    get { return  this.Rows * this.CellHeight; }
+    get { return  this.m_totalHeight; }
 }
 
 public  int  Columns  {
@@ -134,6 +134,26 @@ DependencyProperty.Register(
 //
 //    Protected Member Functions (Overrides).
 //
+
+//----------------------------------------------------------------
+/**
+**
+**/
+
+protected  override  System.Windows.Size
+MeasureOverride(
+        System.Windows.Size     availableSize)
+{
+    //  列数や幅データが変わっていたら位置キャッシュを更新  //
+    if ( this.m_colPos.Count != Columns ) {
+        updateColumnPositions();
+    }
+    if ( this.m_rowPos.Count != Rows ) {
+        updateRowPositions();
+    }
+
+    return  base.MeasureOverride(availableSize);
+}
 
 
 //----------------------------------------------------------------
@@ -221,6 +241,7 @@ OnColumnWidthsChanged(
         DependencyObject                    d,
         DependencyPropertyChangedEventArgs  e)
 {
+    ((MatrixDisplay)d).updateColumnPositions();
 }
 
 private  static  void
@@ -230,11 +251,53 @@ OnRowHeightsChanged(
 {
 }
 
+//----------------------------------------------------------------
+/**
+**
+**/
+
+private  void
+updateColumnPositions()
+{
+    this.m_colPos.Clear();
+    double  current = 0;
+
+    for ( int c = 0; c < this.Columns; ++ c ) {
+        this.m_colPos.Add(current);
+        double  w = (ColumnWidths != null && c < ColumnWidths.Count) ?
+                    ColumnWidths[c] : CellWidth;
+        current += w;
+    }
+    this.m_totalWidth   = current;
+}
+
+private  void
+updateRowPositions()
+{
+    this.m_rowPos.Clear();
+    int     numRows = this.Rows;
+    double  current = 0;
+
+    for ( int r = 0; r < numRows; ++ r ) {
+        this.m_rowPos.Add(current);
+        double  h = (RowHeights != null && r < RowHeights.Count) ?
+                    RowHeights[r] : CellHeight;
+        current += h;
+    }
+    this.m_totalHeight  = current;
+}
+
 
 //========================================================================
 //
 //    Member Variables.
 //
+
+private   List<double>   m_colPos = new List<double>();
+private   List<double>   m_rowPos = new List<double>();
+
+private   double         m_totalWidth;
+private   double         m_totalHeight;
 
 
 }   //  End class  MatrixDisplay
