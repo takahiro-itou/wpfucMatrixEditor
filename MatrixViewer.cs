@@ -70,6 +70,11 @@ public  int  Columns  {
     set { SetValue(ColumnsProperty, value); }
 }
 
+public  IList<double>  ColumnWidths  {
+    get { return  (IList<double>)GetValue(ColumnWidthsProperty); }
+    set { SetValue(ColumnWidthsProperty, value); }
+}
+
 public  ScrollBarVisibility  HorizontalScrollBarVisibility  {
     get => (ScrollBarVisibility)GetValue(HorizontalScrollBarVisibilityProperty);
     set { SetValue(HorizontalScrollBarVisibilityProperty, value); }
@@ -78,6 +83,11 @@ public  ScrollBarVisibility  HorizontalScrollBarVisibility  {
 public  IList  MatrixData  {
     get { return  (IList)GetValue(MatrixDataProperty); }
     set { SetValue(MatrixDataProperty, value); }
+}
+
+public  IList<double>  RowHeights  {
+    get { return  (IList<double>)GetValue(RowHeightsProperty); }
+    set { SetValue(RowHeightsProperty, value); }
 }
 
 public  int  Rows  {
@@ -102,6 +112,12 @@ DependencyProperty.Register(
         new FrameworkPropertyMetadata(0)
 );
 
+public  static  readonly  DependencyProperty  ColumnWidthsProperty =
+DependencyProperty.Register(
+        nameof(ColumnWidths), typeof(IList<double>), typeof(MatrixViewer),
+        new FrameworkPropertyMetadata(null)
+);
+
 public  static  readonly  DependencyProperty
 HorizontalScrollBarVisibilityProperty =
 ScrollViewer.HorizontalScrollBarVisibilityProperty.AddOwner(
@@ -112,6 +128,12 @@ public  static  readonly  DependencyProperty  MatrixDataProperty =
 DependencyProperty.Register(
         nameof(MatrixData), typeof(IList), typeof(MatrixViewer),
         new FrameworkPropertyMetadata(null, OnMatrixDataChanged)
+);
+
+public  static  readonly  DependencyProperty  RowHeightsProperty =
+DependencyProperty.Register(
+        nameof(RowHeights), typeof(IList<double>), typeof(MatrixViewer),
+        new FrameworkPropertyMetadata(null)
 );
 
 public  static  readonly  DependencyProperty  RowsProperty =
@@ -160,7 +182,7 @@ updateInternalData()
 //    Member Variables.
 //
 
-private   MatrixDisplay     m_mdPart;
+private   MatrixDisplay?    m_mdPart;
 
 
 }   //  End class  MatrixViewer
