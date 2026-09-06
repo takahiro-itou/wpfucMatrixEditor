@@ -39,6 +39,31 @@ public  class  MatrixDisplay : WpfControl.Common.ScrollFrameworkElementBase
 //    Accessors.
 //
 
+//----------------------------------------------------------------
+/**
+**
+**/
+
+public  double
+getColWidth(int c)
+{
+    return ( (this.ColumnWidths != null && c < this.ColumnWidths.Count)
+            ? this.ColumnWidths[c] : DefaultCellWidth );
+}
+
+//----------------------------------------------------------------
+/**
+**
+**/
+
+public  double
+getRowHeight(int r)
+{
+    return ( (this.RowHeights != null && r < this.RowHeights.Count)
+            ? this.RowHeights[r] : this.DefaultCellHeight );
+}
+
+
 //========================================================================
 //
 //    Properties.
@@ -196,8 +221,7 @@ OnRender(System.Windows.Media.DrawingContext  dc)
     for ( int r = startRow; r <= endRow; ++ r ) {
         double  absoluteY = this.m_rowPos[r];
         double  y = absoluteY - VerticalOffset;
-        double  cellHeight  = (RowHeights != null && r < RowHeights.Count)
-                    ? RowHeights[r] : DefaultCellHeight;
+        double  rH  = getRowHeight(r);
 
         for ( int c = startCol; c <= endCol; ++ c ) {
             int index = r * Columns + c;
@@ -209,15 +233,13 @@ OnRender(System.Windows.Media.DrawingContext  dc)
             //  セルの左上座標  //
             double  absoluteX = this.m_colPos[c];
             double  x = absoluteX - HorizontalOffset;
-            double  cellWidth = (ColumnWidths != null && c < ColumnWidths.Count)
-                    ? ColumnWidths[c] : DefaultCellWidth;
+            double  cW  = getColWidth(c);
 
             Brush   bgBrush = dat.Background ?? Brushes.White;
             Brush   fgBrush = dat.Foreground ?? Brushes.Black;
 
             dc.DrawRectangle(
-                     bgBrush, gridPen,
-                     new Rect(x, y, cellWidth, cellHeight));
+                     bgBrush, gridPen, new Rect(x, y, cW, rH));
             FormattedText formattedText = new FormattedText(
                     val,
                     CultureInfo.CurrentCulture,
@@ -227,8 +249,8 @@ OnRender(System.Windows.Media.DrawingContext  dc)
                     fgBrush,
                     VisualTreeHelper.GetDpi(this).PixelsPerDip);
             //  中央揃えの座標計算。    //
-            double textX = x + (cellWidth - formattedText.Width) / 2;
-            double textY = y + (cellHeight - formattedText.Height) / 2;
+            double textX = x + (cW - formattedText.Width ) / 2;
+            double textY = y + (rH - formattedText.Height) / 2;
             dc.DrawText(formattedText, new Point(textX, textY));
         }
     }
@@ -302,12 +324,12 @@ private  void
 updateColumnPositions()
 {
     this.m_colPos.Clear();
+    int     numCols = this.Columns;
     double  current = 0;
 
-    for ( int c = 0; c < this.Columns; ++ c ) {
+    for ( int c = 0; c < numCols; ++ c ) {
         this.m_colPos.Add(current);
-        double  w = (ColumnWidths != null && c < ColumnWidths.Count) ?
-                    ColumnWidths[c] : DefaultCellWidth;
+        double  w = getColWidth(c);
         current += w;
     }
     this.m_totalWidth   = current;
@@ -322,8 +344,7 @@ updateRowPositions()
 
     for ( int r = 0; r < numRows; ++ r ) {
         this.m_rowPos.Add(current);
-        double  h = (RowHeights != null && r < RowHeights.Count) ?
-                    RowHeights[r] : DefaultCellHeight;
+        double  h = getRowHeight(r);
         current += h;
     }
     this.m_totalHeight  = current;
