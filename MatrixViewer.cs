@@ -115,7 +115,7 @@ DependencyProperty.Register(
 public  static  readonly  DependencyProperty  ColumnWidthsProperty =
 DependencyProperty.Register(
         nameof(ColumnWidths), typeof(IList<double>), typeof(MatrixViewer),
-        new FrameworkPropertyMetadata(0)
+        new FrameworkPropertyMetadata(null)
 );
 
 public  static  readonly  DependencyProperty
@@ -133,7 +133,7 @@ DependencyProperty.Register(
 public  static  readonly  DependencyProperty  RowHeightsProperty =
 DependencyProperty.Register(
         nameof(RowHeights), typeof(IList<double>), typeof(MatrixViewer),
-        new FrameworkPropertyMetadata(0)
+        new FrameworkPropertyMetadata(null)
 );
 
 public  static  readonly  DependencyProperty  RowsProperty =
