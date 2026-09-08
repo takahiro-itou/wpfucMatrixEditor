@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)MatrixCellData.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MatrixDisplay.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MatrixEditor.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MatrixViewer.cs" />
+  </ItemGroup>
+
+</Project>
