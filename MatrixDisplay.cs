@@ -1,4 +1,4 @@
-﻿//  -*-  coding: utf-8-with-signature  -*-  //
+﻿//  -*-  coding: utf-8-with-signature-unix     -*-  //
 /*************************************************************************
 **                                                                      **
 **                  ---  WPF UserControl Library.  ---                  **
@@ -12,20 +12,20 @@
 **                                                                      **
 *************************************************************************/
 
-using System.Globalization;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media;
+using   System.Globalization;
+using   System.Windows;
+using   System.Windows.Controls;
+using   System.Windows.Media;
 
 
-namespace  WpfControl.Editor  {
+namespace  WpfHelper.Controls.Editor  {
 
 //========================================================================
 //
 //    MatrixDisplay  class
 //
 
-public  class  MatrixDisplay : WpfControl.Common.ScrollFrameworkElementBase
+public  class  MatrixDisplay : ScrollFrameworkElementBase
 {
 
 //========================================================================
