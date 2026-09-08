@@ -23,6 +23,6 @@ namespace  WpfControl.Editor  {
 public  class  MatrixEditor : MatrixViewer
 {
 
-}   //  End class  MatrixEditor
+}   //  End of class  MatrixEditor
 
 }   //  End of namespace  WpfControl.Editor

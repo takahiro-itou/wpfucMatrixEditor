@@ -34,6 +34,6 @@ public  System.String   Value { get; set; }
 public  Brush?          Background { get; set; }
 public  Brush?          Foreground { get; set; }
 
-}   //  End class  MatrixCellData
+}   //  End of struct  MatrixCellData
 
 }   //  End of namespace  WpfControl.Editor
