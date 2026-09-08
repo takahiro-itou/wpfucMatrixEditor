@@ -20,7 +20,7 @@ using   System.Windows.Media;
 using   WpfHelper.Controls;
 
 
-namespace  WpfControls.Editor  {
+namespace  WpfControl.Editor  {
 
 //========================================================================
 //
