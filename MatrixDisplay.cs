@@ -17,8 +17,10 @@ using   System.Windows;
 using   System.Windows.Controls;
 using   System.Windows.Media;
 
+using   WpfHelper.Controls;
 
-namespace  WpfHelper.Controls.Editor  {
+
+namespace  WpfControl.Editor  {
 
 //========================================================================
 //
@@ -363,6 +365,6 @@ private   double         m_totalWidth;
 private   double         m_totalHeight;
 
 
-}   //  End class  MatrixDisplay
+}   //  End op class  MatrixDisplay
 
 }   //  End of namespace  WpfControl.Editor

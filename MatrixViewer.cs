@@ -185,6 +185,6 @@ updateInternalData()
 private   MatrixDisplay?    m_mdPart;
 
 
-}   //  End class  MatrixViewer
+}   //  End of class  MatrixViewer
 
 }   //  End of namespace  WpfControl.Editor
