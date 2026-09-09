@@ -264,10 +264,6 @@ OnRender(System.Windows.Media.DrawingContext  dc)
 {
     base.OnRender(dc);
 
-    if ( this.MatrixData == null || Rows <= 0 || Columns <= 0) {
-        return;
-    }
-
     //  描画領域を ScrollViewer 内にクリップする。  //
     dc.PushClip(new RectangleGeometry(
         new Rect(0, 0, ViewportWidth, ViewportHeight)
@@ -280,6 +276,10 @@ OnRender(System.Windows.Media.DrawingContext  dc)
             this.Background,
             penBorder,
             new Rect(0, 0, this.ViewportWidth, this.ViewportHeight));
+
+    if ( this.MatrixData == null || Rows <= 0 || Columns <= 0) {
+        return;
+    }
 
     //  表示範囲を計算。    /
     int startCol = getColumnIndexAtX(HorizontalOffset);
