@@ -230,7 +230,7 @@ OnRender(System.Windows.Media.DrawingContext  dc)
             if ( index >= MatrixData.Length ) { continue; }
 
             MatrixCellData  dat = MatrixData[index];
-            System.String   val = dat.Value;
+            System.String   val = dat.Value ?? "";
 
             //  セルの左上座標  //
             double  absoluteX = this.m_colPos[c];
