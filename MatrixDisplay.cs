@@ -35,6 +35,18 @@ public  class  MatrixDisplay : ScrollFrameworkElementBase
 //    Constructor(s) and Destructor.
 //
 
+//----------------------------------------------------------------
+/**   コンストラクタ。
+**
+**/
+
+public  MatrixDisplay()
+{
+    //  デバイスの物理ピクセルに配置を強制する  //
+    this.SnapsToDevicePixels  = true;
+    this.UseLayoutRounding    = true;
+}
+
 
 //========================================================================
 //
@@ -270,12 +282,16 @@ OnRender(System.Windows.Media.DrawingContext  dc)
     ));
 
     //  背景塗りつぶし  //
-    Pen penBorder = new Pen(this.BorderLine, 0.5);
+    Pen penBorder = new Pen(this.BorderLine, 1.0);
 
     dc.DrawRectangle(
             this.Background,
             penBorder,
-            new Rect(0, 0, this.ViewportWidth, this.ViewportHeight));
+            new Rect(
+                0.5,  0.5,
+                this.ViewportWidth  - 1.0,
+                this.ViewportHeight - 1.0)
+    );
 
     if ( this.MatrixData == null || Rows <= 0 || Columns <= 0) {
         return;
@@ -295,7 +311,7 @@ OnRender(System.Windows.Media.DrawingContext  dc)
 
     for ( int r = startRow; r <= endRow; ++ r ) {
         double  absoluteY = this.m_rowPos[r];
-        double  y = absoluteY - VerticalOffset;
+        double  y = absoluteY - VerticalOffset + 1.0;
         double  rH  = getRowHeight(r);
 
         for ( int c = startCol; c <= endCol; ++ c ) {
@@ -307,7 +323,7 @@ OnRender(System.Windows.Media.DrawingContext  dc)
 
             //  セルの左上座標  //
             double  absoluteX = this.m_colPos[c];
-            double  x = absoluteX - HorizontalOffset;
+            double  x = absoluteX - HorizontalOffset + 1.0;
             double  cW  = getColWidth(c);
 
             Brush   bgBrush = dat.Background ?? Brushes.White;
