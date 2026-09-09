@@ -35,6 +35,30 @@ public  class  MatrixDisplay : ScrollFrameworkElementBase
 //    Constructor(s) and Destructor.
 //
 
+//----------------------------------------------------------------
+/**   コンストラクタ。
+**
+**/
+
+public  MatrixDisplay()
+{
+    //  デバイスの物理ピクセルに配置を強制する  //
+    this.SnapsToDevicePixels  = true;
+    this.UseLayoutRounding    = true;
+}
+
+
+//========================================================================
+//
+//    Public Consts.
+//
+
+public  static  readonly  Brush     DEFAULT_BACKGROUND  =
+new  SolidColorBrush(Color.FromRgb(240, 240, 240));
+
+public  static  readonly  Brush     DEFAULT_BORDER_LINE =
+new  SolidColorBrush(Color.FromRgb(104, 140, 175));
+
 
 //========================================================================
 //
@@ -68,11 +92,8 @@ getRowHeight(int r)
 
 //========================================================================
 //
-//    Properties.
+//    Properties (Overrides).
 //
-
-public  double  DefaultCellWidth  { get; set; } = 60.0;
-public  double  DefaultCellHeight { get; set; } = 25.0;
 
 public  override  double  ExtentWidth  {
     get { return  this.m_totalWidth; }
@@ -81,6 +102,30 @@ public  override  double  ExtentWidth  {
 public  override  double  ExtentHeight  {
     get { return  this.m_totalHeight; }
 }
+
+public  override  double  SmallChangeX => DefaultCellWidth;
+
+public  override  double  SmallChangeY => DefaultCellHeight;
+
+
+//========================================================================
+//
+//    Properties.
+//
+
+public  double  DefaultCellWidth  { get; set; } = 60.0;
+public  double  DefaultCellHeight { get; set; } = 25.0;
+
+public  Brush  Background {
+    get { return  (Brush)GetValue(BackgroundProperty); }
+    set { SetValue(BackgroundProperty, value); }
+}
+
+public  Brush  BorderLine  {
+    get { return  (Brush)GetValue(BorderLineProperty); }
+    set { SetValue(BorderLineProperty, value); }
+}
+
 
 public  int  Columns  {
     get { return  (int)GetValue(ColumnsProperty); }
@@ -92,15 +137,22 @@ public  IList<double>  ColumnWidths  {
     set { SetValue(ColumnWidthsProperty, value); }
 }
 
+
+public  Brush  GridBackground  {
+    get { return  (Brush)GetValue(GridBackgroundProperty); }
+    set { SetValue(GridBackgroundProperty, value); }
+}
+
+public  Brush  GridLine  {
+    get { return  (Brush)GetValue(GridLineProperty); }
+    set { SetValue(GridLineProperty, value); }
+}
+
+
 public  MatrixCellData[]?  MatrixData  {
     get { return  (MatrixCellData[]?)GetValue(MatrixDataProperty); }
     set { SetValue(MatrixDataProperty, value); }
 }
-
-
-public  override  double  SmallChangeX => DefaultCellWidth;
-
-public  override  double  SmallChangeY => DefaultCellHeight;
 
 
 public  IList<double>  RowHeights  {
@@ -119,9 +171,26 @@ public  int  Rows  {
 //
 
 private  const  FrameworkPropertyMetadataOptions
+AFFECTS_RENDER =
+        FrameworkPropertyMetadataOptions.AffectsRender;
+
+private  const  FrameworkPropertyMetadataOptions
 AFFECTS_LAYOUT =
         FrameworkPropertyMetadataOptions.AffectsMeasure |
-        FrameworkPropertyMetadataOptions.AffectsRender;
+        AFFECTS_RENDER;
+
+
+public  static  readonly  DependencyProperty  BackgroundProperty =
+DependencyProperty.Register(
+        nameof(Background), typeof(Brush), typeof(MatrixDisplay),
+        new FrameworkPropertyMetadata(DEFAULT_BACKGROUND, AFFECTS_RENDER)
+);
+
+public  static  readonly  DependencyProperty  BorderLineProperty =
+DependencyProperty.Register(
+        nameof(BorderLine), typeof(Brush), typeof(MatrixDisplay),
+        new FrameworkPropertyMetadata(DEFAULT_BORDER_LINE, AFFECTS_RENDER)
+);
 
 
 public  static  readonly  DependencyProperty  ColumnsProperty =
@@ -135,6 +204,19 @@ DependencyProperty.Register(
         nameof(ColumnWidths), typeof(IList<double>), typeof(MatrixDisplay),
         new FrameworkPropertyMetadata(
                 null, AFFECTS_LAYOUT, OnColumnWidthsChanged)
+);
+
+public  static  readonly  DependencyProperty  GridBackgroundProperty =
+DependencyProperty.Register(
+        nameof(GridBackground), typeof(Brush), typeof(MatrixDisplay),
+        new FrameworkPropertyMetadata(Brushes.White, AFFECTS_RENDER)
+);
+
+
+public  static  readonly  DependencyProperty  GridLineProperty =
+DependencyProperty.Register(
+        nameof(GridLine), typeof(Brush), typeof(MatrixDisplay),
+        new FrameworkPropertyMetadata(Brushes.Black, AFFECTS_RENDER)
 );
 
 public  static  readonly  DependencyProperty  MatrixDataProperty =
@@ -194,19 +276,26 @@ OnRender(System.Windows.Media.DrawingContext  dc)
 {
     base.OnRender(dc);
 
-    if ( this.MatrixData == null || Rows <= 0 || Columns <= 0) {
-        return;
-    }
-
     //  描画領域を ScrollViewer 内にクリップする。  //
     dc.PushClip(new RectangleGeometry(
         new Rect(0, 0, ViewportWidth, ViewportHeight)
     ));
 
     //  背景塗りつぶし  //
+    Pen penBorder = new Pen(this.BorderLine, 1.0);
+
     dc.DrawRectangle(
-            Brushes.White, null,
-            new Rect(0, 0, this.ViewportWidth, this.ViewportHeight));
+            this.Background,
+            penBorder,
+            new Rect(
+                0.5,  0.5,
+                this.ViewportWidth  - 1.0,
+                this.ViewportHeight - 1.0)
+    );
+
+    if ( this.MatrixData == null || Rows <= 0 || Columns <= 0) {
+        return;
+    }
 
     //  表示範囲を計算。    /
     int startCol = getColumnIndexAtX(HorizontalOffset);
@@ -218,11 +307,11 @@ OnRender(System.Windows.Media.DrawingContext  dc)
             SystemFonts.CaptionFontFamily,
             FontStyles.Normal,  FontWeights.Normal, FontStretches.Normal);
     double fontSize = 12;
-    Pen gridPen = new Pen(Brushes.LightGray, 0.5);
+    Pen gridPen = new Pen(this.GridLine, 0.5);
 
     for ( int r = startRow; r <= endRow; ++ r ) {
         double  absoluteY = this.m_rowPos[r];
-        double  y = absoluteY - VerticalOffset;
+        double  y = absoluteY - VerticalOffset + 1.0;
         double  rH  = getRowHeight(r);
 
         for ( int c = startCol; c <= endCol; ++ c ) {
@@ -230,11 +319,11 @@ OnRender(System.Windows.Media.DrawingContext  dc)
             if ( index >= MatrixData.Length ) { continue; }
 
             MatrixCellData  dat = MatrixData[index];
-            System.String   val = dat.Value;
+            System.String   val = dat.Value ?? "";
 
             //  セルの左上座標  //
             double  absoluteX = this.m_colPos[c];
-            double  x = absoluteX - HorizontalOffset;
+            double  x = absoluteX - HorizontalOffset + 1.0;
             double  cW  = getColWidth(c);
 
             Brush   bgBrush = dat.Background ?? Brushes.White;
