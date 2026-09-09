@@ -38,6 +38,18 @@ public  class  MatrixDisplay : ScrollFrameworkElementBase
 
 //========================================================================
 //
+//    Public Consts.
+//
+
+public  static  readonly  Brush     DEFAULT_BACKGROUND  =
+new  SolidColorBrush(Color.FromRgb(240, 240, 240));
+
+public  static  readonly  Brush     DEFAULT_BORDER_LINE =
+new  SolidColorBrush(Color.FromRgb(104, 140, 175));
+
+
+//========================================================================
+//
 //    Accessors.
 //
 
@@ -213,18 +225,6 @@ DependencyProperty.Register(
         nameof(Rows), typeof(int), typeof(MatrixDisplay),
         new FrameworkPropertyMetadata(0, AFFECTS_LAYOUT)
 );
-
-
-//========================================================================
-//
-//    Public Consts.
-//
-
-public  static  readonly  Brush     DEFAULT_BACKGROUND  =
-new  SolidColorBrush(Color.FromRgb(240, 240, 240));
-
-public  static  readonly  Brush     DEFAULT_BORDER_LINE =
-new  SolidColorBrush(Color.FromRgb(104, 140, 175));
 
 
 //========================================================================
