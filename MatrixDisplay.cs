@@ -159,13 +159,13 @@ AFFECTS_LAYOUT =
 public  static  readonly  DependencyProperty  BackgroundProperty =
 DependencyProperty.Register(
         nameof(Background), typeof(Brush), typeof(MatrixDisplay),
-        new FrameworkPropertyMetadata(Brushes.Transparent, AFFECTS_RENDER)
+        new FrameworkPropertyMetadata(DEFAULT_BACKGROUND, AFFECTS_RENDER)
 );
 
 public  static  readonly  DependencyProperty  BorderLineProperty =
 DependencyProperty.Register(
         nameof(BorderLine), typeof(Brush), typeof(MatrixDisplay),
-        new FrameworkPropertyMetadata(Brushes.Black, AFFECTS_RENDER)
+        new FrameworkPropertyMetadata(DEFAULT_BORDER_LINE, AFFECTS_RENDER)
 );
 
 
@@ -217,6 +217,18 @@ DependencyProperty.Register(
 
 //========================================================================
 //
+//    Public Consts.
+//
+
+public  static  readonly  Brush     DEFAULT_BACKGROUND  =
+new  SolidColorBrush(Color.FromRgb(240, 240, 240));
+
+public  static  readonly  Brush     DEFAULT_BORDER_LINE =
+new  SolidColorBrush(Color.FromRgb(104, 140, 175));
+
+
+//========================================================================
+//
 //    Protected Member Functions (Overrides).
 //
 
@@ -262,8 +274,11 @@ OnRender(System.Windows.Media.DrawingContext  dc)
     ));
 
     //  背景塗りつぶし  //
+    Pen penBorder = new Pen(this.BorderLine, 0.5);
+
     dc.DrawRectangle(
-            Brushes.White, null,
+            this.Background,
+            penBorder,
             new Rect(0, 0, this.ViewportWidth, this.ViewportHeight));
 
     //  表示範囲を計算。    /
@@ -276,7 +291,7 @@ OnRender(System.Windows.Media.DrawingContext  dc)
             SystemFonts.CaptionFontFamily,
             FontStyles.Normal,  FontWeights.Normal, FontStretches.Normal);
     double fontSize = 12;
-    Pen gridPen = new Pen(Brushes.LightGray, 0.5);
+    Pen gridPen = new Pen(this.GridLine, 0.5);
 
     for ( int r = startRow; r <= endRow; ++ r ) {
         double  absoluteY = this.m_rowPos[r];
