@@ -68,11 +68,8 @@ getRowHeight(int r)
 
 //========================================================================
 //
-//    Properties.
+//    Properties (Overrides).
 //
-
-public  double  DefaultCellWidth  { get; set; } = 60.0;
-public  double  DefaultCellHeight { get; set; } = 25.0;
 
 public  override  double  ExtentWidth  {
     get { return  this.m_totalWidth; }
@@ -81,6 +78,30 @@ public  override  double  ExtentWidth  {
 public  override  double  ExtentHeight  {
     get { return  this.m_totalHeight; }
 }
+
+public  override  double  SmallChangeX => DefaultCellWidth;
+
+public  override  double  SmallChangeY => DefaultCellHeight;
+
+
+//========================================================================
+//
+//    Properties.
+//
+
+public  double  DefaultCellWidth  { get; set; } = 60.0;
+public  double  DefaultCellHeight { get; set; } = 25.0;
+
+public  Brush  Background {
+    get { return  (Brush)GetValue(BackgroundProperty); }
+    set { SetValue(BackgroundProperty, value); }
+}
+
+public  Brush  BorderLine  {
+    get { return  (Brush)GetValue(BorderLineProperty); }
+    set { SetValue(BorderLineProperty, value); }
+}
+
 
 public  int  Columns  {
     get { return  (int)GetValue(ColumnsProperty); }
@@ -92,15 +113,22 @@ public  IList<double>  ColumnWidths  {
     set { SetValue(ColumnWidthsProperty, value); }
 }
 
+
+public  Brush  GridBackground  {
+    get { return  (Brush)GetValue(GridBackgroundProperty); }
+    set { SetValue(GridBackgroundProperty, value); }
+}
+
+public  Brush  GridLine  {
+    get { return  (Brush)GetValue(GridLineProperty); }
+    set { SetValue(GridLineProperty, value); }
+}
+
+
 public  MatrixCellData[]?  MatrixData  {
     get { return  (MatrixCellData[]?)GetValue(MatrixDataProperty); }
     set { SetValue(MatrixDataProperty, value); }
 }
-
-
-public  override  double  SmallChangeX => DefaultCellWidth;
-
-public  override  double  SmallChangeY => DefaultCellHeight;
 
 
 public  IList<double>  RowHeights  {
@@ -119,9 +147,26 @@ public  int  Rows  {
 //
 
 private  const  FrameworkPropertyMetadataOptions
+AFFECTS_RENDER =
+        FrameworkPropertyMetadataOptions.AffectsRender;
+
+private  const  FrameworkPropertyMetadataOptions
 AFFECTS_LAYOUT =
         FrameworkPropertyMetadataOptions.AffectsMeasure |
-        FrameworkPropertyMetadataOptions.AffectsRender;
+        AFFECTS_RENDER;
+
+
+public  static  readonly  DependencyProperty  BackgroundProperty =
+DependencyProperty.Register(
+        nameof(Background), typeof(Brush), typeof(MatrixDisplay),
+        new FrameworkPropertyMetadata(Brushes.Transparent, AFFECTS_RENDER)
+);
+
+public  static  readonly  DependencyProperty  BorderLineProperty =
+DependencyProperty.Register(
+        nameof(BorderLine), typeof(Brush), typeof(MatrixDisplay),
+        new FrameworkPropertyMetadata(Brushes.Black, AFFECTS_RENDER)
+);
 
 
 public  static  readonly  DependencyProperty  ColumnsProperty =
@@ -135,6 +180,19 @@ DependencyProperty.Register(
         nameof(ColumnWidths), typeof(IList<double>), typeof(MatrixDisplay),
         new FrameworkPropertyMetadata(
                 null, AFFECTS_LAYOUT, OnColumnWidthsChanged)
+);
+
+public  static  readonly  DependencyProperty  GridBackgroundProperty =
+DependencyProperty.Register(
+        nameof(GridBackground), typeof(Brush), typeof(MatrixDisplay),
+        new FrameworkPropertyMetadata(Brushes.White, AFFECTS_RENDER)
+);
+
+
+public  static  readonly  DependencyProperty  GridLineProperty =
+DependencyProperty.Register(
+        nameof(GridLine), typeof(Brush), typeof(MatrixDisplay),
+        new FrameworkPropertyMetadata(Brushes.Black, AFFECTS_RENDER)
 );
 
 public  static  readonly  DependencyProperty  MatrixDataProperty =
