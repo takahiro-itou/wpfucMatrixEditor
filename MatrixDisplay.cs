@@ -165,6 +165,7 @@ public  int  Rows  {
     set { SetValue(RowsProperty, value); }
 }
 
+
 //========================================================================
 //
 //    Dependency Properties.
@@ -205,6 +206,19 @@ DependencyProperty.Register(
         new FrameworkPropertyMetadata(
                 null, AFFECTS_LAYOUT, OnColumnWidthsChanged)
 );
+
+public  static  readonly  DependencyProperty  DefaultCellHeight =
+DependencyProperty.Register(
+        nameof(DefaultCellHeight), typeof(double), typeof(MatrixDisplay),
+        new FrameworkPropertyMetadata(25.0, AFFECTS_LAYOUT)
+);
+
+public  static  readonly  DependencyProperty  DefaultCellWidth =
+DependencyProperty.Register(
+        nameof(DefaultCellWidth), typeof(double), typeof(MatrixDisplay),
+        new FrameworkPropertyMetadata(60.0, AFFECTS_LAYOUT)
+);
+
 
 public  static  readonly  DependencyProperty  GridBackgroundProperty =
 DependencyProperty.Register(
