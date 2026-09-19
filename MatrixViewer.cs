@@ -75,6 +75,11 @@ public  IList<double>  ColumnWidths  {
     set { SetValue(ColumnWidthsProperty, value); }
 }
 
+public  MatrixDisplay  Display  {
+    get { return  (MatrixDisplay)GetValue(DisplayProperty); }
+    set { SetValue(DisplayProperty, value); }
+}
+
 public  ScrollBarVisibility  HorizontalScrollBarVisibility  {
     get => (ScrollBarVisibility)GetValue(HorizontalScrollBarVisibilityProperty);
     set { SetValue(HorizontalScrollBarVisibilityProperty, value); }
@@ -106,6 +111,16 @@ public  ScrollBarVisibility  VerticalScrollBarVisibility  {
 //    Dependency Properties.
 //
 
+private  const  FrameworkPropertyMetadataOptions
+AFFECTS_RENDER =
+        FrameworkPropertyMetadataOptions.AffectsRender;
+
+private  const  FrameworkPropertyMetadataOptions
+AFFECTS_LAYOUT =
+        FrameworkPropertyMetadataOptions.AffectsMeasure |
+        AFFECTS_RENDER;
+
+
 public  static  readonly  DependencyProperty  ColumnsProperty =
 DependencyProperty.Register(
         nameof(Columns), typeof(int), typeof(MatrixViewer),
@@ -116,6 +131,12 @@ public  static  readonly  DependencyProperty  ColumnWidthsProperty =
 DependencyProperty.Register(
         nameof(ColumnWidths), typeof(IList<double>), typeof(MatrixViewer),
         new FrameworkPropertyMetadata(null)
+);
+
+public  static  readonly  DependencyProperty  DisplayProperty =
+DependencyProperty.Register(
+        nameof(Display), typeof(MatrixDisplay), typeof(MatrixViewer),
+        new FrameworkPropertyMetadata(null, AFFECTS_RENDER)
 );
 
 public  static  readonly  DependencyProperty
