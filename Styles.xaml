@@ -17,12 +17,28 @@
               VerticalScrollBarVisibility="{TemplateBinding VerticalScrollBarVisibility}"
           >
             <editor:MatrixDisplay
-                x:Name="PART_MatrixDisplay"
-                Columns="{Binding Columns, RelativeSource={RelativeSource TemplatedParent}}"
-                ColumnWidths="{Binding ColumnWidths, RelativeSource={RelativeSource TemplatedParent}}"
-                RowHeights="{Binding RowHeights, RelativeSource={RelativeSource TemplatedParent}}"
-                Rows="{Binding Rows, RelativeSource={RelativeSource TemplatedParent}}"
-            />
+                x:Name="PART_MatrixDisplay">
+              <editor:MatrixDisplay.Columns>
+                <Binding
+                    Path="Columns"
+                    RelativeSource="{RelativeSource TemplatedParent}" />
+              </editor:MatrixDisplay.Columns>
+              <editor:MatrixDisplay.ColumnWidths>
+                <Binding
+                    Path="ColumnWidths"
+                    RelativeSource="{RelativeSource TemplatedParent}" />
+              </editor:MatrixDisplay.ColumnWidths>
+              <editor:MatrixDisplay.RowHeights>
+                <Binding
+                    Path="RowHeights"
+                    RelativeSource="{RelativeSource TemplatedParent}" />
+              </editor:MatrixDisplay.RowHeights>
+              <editor:MatrixDisplay.Rows>
+                <Binding
+                    Path="Rows"
+                    RelativeSource="{RelativeSource TemplatedParent}" />
+              </editor:MatrixDisplay.Rows>
+            </editor:MatrixDisplay>
           </ScrollViewer>
         </ControlTemplate>
       </Setter.Value>
