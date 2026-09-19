@@ -113,16 +113,6 @@ public  override  double  SmallChangeY => DefaultCellHeight;
 //    Properties.
 //
 
-public  double  DefaultCellWidth  {
-    get { return  (double)GetValue(DefaultCellWidthProperty); }
-    set { SetValue(DefaultCellWidthProperty, value); }
-}
-
-public  double  DefaultCellHeight {
-    get { return  (double)GetValue(DefaultCellHeightProperty); }
-    set { SetValue(DefaultCellHeightProperty, value); }
-}
-
 public  Brush  Background {
     get { return  (Brush)GetValue(BackgroundProperty); }
     set { SetValue(BackgroundProperty, value); }
@@ -142,6 +132,17 @@ public  int  Columns  {
 public  IList<double>  ColumnWidths  {
     get { return  (IList<double>)GetValue(ColumnWidthsProperty); }
     set { SetValue(ColumnWidthsProperty, value); }
+}
+
+
+public  double  DefaultCellHeight {
+    get { return  (double)GetValue(DefaultCellHeightProperty); }
+    set { SetValue(DefaultCellHeightProperty, value); }
+}
+
+public  double  DefaultCellWidth  {
+    get { return  (double)GetValue(DefaultCellWidthProperty); }
+    set { SetValue(DefaultCellWidthProperty, value); }
 }
 
 
