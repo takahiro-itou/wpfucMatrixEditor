@@ -113,8 +113,15 @@ public  override  double  SmallChangeY => DefaultCellHeight;
 //    Properties.
 //
 
-public  double  DefaultCellWidth  { get; set; } = 60.0;
-public  double  DefaultCellHeight { get; set; } = 25.0;
+public  double  DefaultCellWidth  {
+    get { return  (double)GetValue(DefaultCellWidthProperty); }
+    set { SetValue(DefaultCellWidthProperty, value); }
+}
+
+public  double  DefaultCellHeight {
+    get { return  (double)GetValue(DefaultCellHeightProperty); }
+    set { SetValue(DefaultCellHeightProperty, value); }
+}
 
 public  Brush  Background {
     get { return  (Brush)GetValue(BackgroundProperty); }
@@ -207,13 +214,13 @@ DependencyProperty.Register(
                 null, AFFECTS_LAYOUT, OnColumnWidthsChanged)
 );
 
-public  static  readonly  DependencyProperty  DefaultCellHeight =
+public  static  readonly  DependencyProperty  DefaultCellHeightProperty =
 DependencyProperty.Register(
         nameof(DefaultCellHeight), typeof(double), typeof(MatrixDisplay),
         new FrameworkPropertyMetadata(25.0, AFFECTS_LAYOUT)
 );
 
-public  static  readonly  DependencyProperty  DefaultCellWidth =
+public  static  readonly  DependencyProperty  DefaultCellWidthProperty =
 DependencyProperty.Register(
         nameof(DefaultCellWidth), typeof(double), typeof(MatrixDisplay),
         new FrameworkPropertyMetadata(60.0, AFFECTS_LAYOUT)
