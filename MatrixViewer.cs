@@ -65,14 +65,9 @@ OnApplyTemplate()
 //    Properties.
 //
 
-public  int  Columns  {
-    get { return  (int)GetValue(ColumnsProperty); }
-    set { SetValue(ColumnsProperty, value); }
-}
-
-public  IList<double>  ColumnWidths  {
-    get { return  (IList<double>)GetValue(ColumnWidthsProperty); }
-    set { SetValue(ColumnWidthsProperty, value); }
+public  MatrixDisplay  Display  {
+    get { return  (MatrixDisplay)GetValue(DisplayProperty); }
+    set { SetValue(DisplayProperty, value); }
 }
 
 public  ScrollBarVisibility  HorizontalScrollBarVisibility  {
@@ -83,16 +78,6 @@ public  ScrollBarVisibility  HorizontalScrollBarVisibility  {
 public  IList  MatrixData  {
     get { return  (IList)GetValue(MatrixDataProperty); }
     set { SetValue(MatrixDataProperty, value); }
-}
-
-public  IList<double>  RowHeights  {
-    get { return  (IList<double>)GetValue(RowHeightsProperty); }
-    set { SetValue(RowHeightsProperty, value); }
-}
-
-public  int  Rows  {
-    get { return  (int)GetValue(RowsProperty); }
-    set { SetValue(RowsProperty, value); }
 }
 
 public  ScrollBarVisibility  VerticalScrollBarVisibility  {
@@ -106,16 +91,14 @@ public  ScrollBarVisibility  VerticalScrollBarVisibility  {
 //    Dependency Properties.
 //
 
-public  static  readonly  DependencyProperty  ColumnsProperty =
-DependencyProperty.Register(
-        nameof(Columns), typeof(int), typeof(MatrixViewer),
-        new FrameworkPropertyMetadata(0)
-);
+private  const  FrameworkPropertyMetadataOptions
+AFFECTS_RENDER =
+        FrameworkPropertyMetadataOptions.AffectsRender;
 
-public  static  readonly  DependencyProperty  ColumnWidthsProperty =
+public  static  readonly  DependencyProperty  DisplayProperty =
 DependencyProperty.Register(
-        nameof(ColumnWidths), typeof(IList<double>), typeof(MatrixViewer),
-        new FrameworkPropertyMetadata(null)
+        nameof(Display), typeof(MatrixDisplay), typeof(MatrixViewer),
+        new FrameworkPropertyMetadata(null, AFFECTS_RENDER)
 );
 
 public  static  readonly  DependencyProperty
@@ -128,18 +111,6 @@ public  static  readonly  DependencyProperty  MatrixDataProperty =
 DependencyProperty.Register(
         nameof(MatrixData), typeof(IList), typeof(MatrixViewer),
         new FrameworkPropertyMetadata(null, OnMatrixDataChanged)
-);
-
-public  static  readonly  DependencyProperty  RowHeightsProperty =
-DependencyProperty.Register(
-        nameof(RowHeights), typeof(IList<double>), typeof(MatrixViewer),
-        new FrameworkPropertyMetadata(null)
-);
-
-public  static  readonly  DependencyProperty  RowsProperty =
-DependencyProperty.Register(
-        nameof(Rows), typeof(int), typeof(MatrixViewer),
-        new FrameworkPropertyMetadata(0)
 );
 
 public  static  readonly  DependencyProperty
