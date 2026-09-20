@@ -119,21 +119,6 @@ public  int  Columns  {
     set { SetValue(ColumnsProperty, value); }
 }
 
-public  IList<double>  ColumnWidths  {
-    get { return  (IList<double>)GetValue(ColumnWidthsProperty); }
-    set { SetValue(ColumnWidthsProperty, value); }
-}
-
-public  double  DefaultCellHeight {
-    get { return  (double)GetValue(DefaultCellHeightProperty); }
-    set { SetValue(DefaultCellHeightProperty, value); }
-}
-
-public  double  DefaultCellWidth  {
-    get { return  (double)GetValue(DefaultCellWidthProperty); }
-    set { SetValue(DefaultCellWidthProperty, value); }
-}
-
 //----------------------------------------------------------------
 /**   レイアウトに関する設定をまとめたプロパティ。
 **
@@ -157,12 +142,6 @@ public  MatrixOptions  Options
 {
     get { return  (MatrixOptions)GetValue(OptionsProperty); }
     set { SetValue(OptionsProperty, value); }
-}
-
-
-public  IList<double>  RowHeights  {
-    get { return  (IList<double>)GetValue(RowHeightsProperty); }
-    set { SetValue(RowHeightsProperty, value); }
 }
 
 public  int  Rows  {
@@ -192,25 +171,6 @@ DependencyProperty.Register(
         new FrameworkPropertyMetadata(0, AFFECTS_LAYOUT)
 );
 
-public  static  readonly  DependencyProperty  ColumnWidthsProperty =
-DependencyProperty.Register(
-        nameof(ColumnWidths), typeof(IList<double>), typeof(MatrixDisplay),
-        new FrameworkPropertyMetadata(
-                null, AFFECTS_LAYOUT, OnColumnWidthsChanged)
-);
-
-public  static  readonly  DependencyProperty  DefaultCellHeightProperty =
-DependencyProperty.Register(
-        nameof(DefaultCellHeight), typeof(double), typeof(MatrixDisplay),
-        new FrameworkPropertyMetadata(25.0, AFFECTS_LAYOUT)
-);
-
-public  static  readonly  DependencyProperty  DefaultCellWidthProperty =
-DependencyProperty.Register(
-        nameof(DefaultCellWidth), typeof(double), typeof(MatrixDisplay),
-        new FrameworkPropertyMetadata(60.0, AFFECTS_LAYOUT)
-);
-
 
 public  static  readonly  DependencyProperty  LayoutProperty =
 DependencyProperty.Register(
@@ -229,14 +189,6 @@ public  static  readonly  DependencyProperty  OptionsProperty =
 DependencyProperty.Register(
     nameof(Options), typeof(MatrixOptions), typeof(MatrixDisplay),
     new FrameworkPropertyMetadata(null, AFFECTS_RENDER, OnOptionsChanged)
-);
-
-
-public  static  readonly  DependencyProperty  RowHeightsProperty =
-DependencyProperty.Register(
-        nameof(RowHeights), typeof(IList<double>), typeof(MatrixDisplay),
-        new FrameworkPropertyMetadata(
-                null, AFFECTS_LAYOUT, OnRowHeightsChanged)
 );
 
 public  static  readonly  DependencyProperty  RowsProperty =

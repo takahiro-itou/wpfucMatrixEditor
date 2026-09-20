@@ -30,6 +30,26 @@ public  class  MatrixLayout : System.Windows.DependencyObject
 //    Properties.
 //
 
+public  IList<double>  ColumnWidths  {
+    get { return  (IList<double>)GetValue(ColumnWidthsProperty); }
+    set { SetValue(ColumnWidthsProperty, value); }
+}
+
+public  double  DefaultCellHeight {
+    get { return  (double)GetValue(DefaultCellHeightProperty); }
+    set { SetValue(DefaultCellHeightProperty, value); }
+}
+
+public  double  DefaultCellWidth  {
+    get { return  (double)GetValue(DefaultCellWidthProperty); }
+    set { SetValue(DefaultCellWidthProperty, value); }
+}
+
+public  IList<double>  RowHeights  {
+    get { return  (IList<double>)GetValue(RowHeightsProperty); }
+    set { SetValue(RowHeightsProperty, value); }
+}
+
 
 //========================================================================
 //
@@ -44,6 +64,48 @@ private  const  FrameworkPropertyMetadataOptions
 AFFECTS_LAYOUT =
         FrameworkPropertyMetadataOptions.AffectsMeasure |
         AFFECTS_RENDER;
+
+
+public  static  readonly  DependencyProperty  ColumnWidthsProperty =
+DependencyProperty.Register(
+    nameof(ColumnWidths), typeof(IList<double>), typeof(MatrixLayout),
+    new FrameworkPropertyMetadata(null, OnInternalPropertyChanged)
+);
+
+public  static  readonly  DependencyProperty  DefaultCellHeightProperty =
+DependencyProperty.Register(
+    nameof(DefaultCellHeight), typeof(double), typeof(MatrixLayout),
+    new FrameworkPropertyMetadata(25.0, OnInternalPropertyChanged)
+);
+
+public  static  readonly  DependencyProperty  DefaultCellWidthProperty =
+DependencyProperty.Register(
+    nameof(DefaultCellWidth), typeof(double), typeof(MatrixDisplay),
+    new FrameworkPropertyMetadata(60.0, OnInternalPropertyChanged)
+);
+
+public  static  readonly  DependencyProperty  RowHeightsProperty =
+DependencyProperty.Register(
+    nameof(RowHeights), typeof(IList<double>), typeof(MatrixDisplay),
+    new FrameworkPropertyMetadata(null, OnInternalPropertyChanged)
+);
+
+//========================================================================
+//
+//    Event Handlers.
+//
+
+private  static  void
+OnInternalPropertyChanged(
+        DependencyObject                    d,
+        DependencyPropertyChangedEventArgs  e)
+{
+    if ( d is MatrixLayout layouts ) {
+        layouts.PropertyChanged?.Invoke(layouts, EventArgs.Empty);
+    }
+}
+
+
 
 }   //  End op class  MatrixLayout
 
