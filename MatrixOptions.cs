@@ -44,7 +44,7 @@ new  SolidColorBrush(Color.FromRgb(104, 140, 175));
 //
 
 
-public  event   EventHandler?                   PropertyChanged;
+public  event   EventHandler?   PropertyChanged;
 
 
 public  Brush  Background {

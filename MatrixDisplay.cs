@@ -95,17 +95,25 @@ getRowHeight(int r)
 //    Properties (Overrides).
 //
 
-public  override  double  ExtentWidth  {
+public  override  double  ExtentWidth
+{
     get { return  this.m_totalWidth; }
 }
 
-public  override  double  ExtentHeight  {
+public  override  double  ExtentHeight
+{
     get { return  this.m_totalHeight; }
 }
 
-public  override  double  SmallChangeX => DefaultCellWidth;
+public  override  double  SmallChangeX
+{
+    get { return  this.Layout.DefaultCellWidth; }
+}
 
-public  override  double  SmallChangeY => DefaultCellHeight;
+public  override  double  SmallChangeY
+{
+    get { return  this.Layout.DefaultCellHeight; }
+}
 
 
 //========================================================================

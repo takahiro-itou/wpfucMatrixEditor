@@ -30,6 +30,9 @@ public  class  MatrixLayout : System.Windows.DependencyObject
 //    Properties.
 //
 
+public  event   EventHandler?   PropertyChanged;
+
+
 public  IList<double>  ColumnWidths  {
     get { return  (IList<double>)GetValue(ColumnWidthsProperty); }
     set { SetValue(ColumnWidthsProperty, value); }
