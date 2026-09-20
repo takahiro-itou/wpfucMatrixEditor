@@ -27,8 +27,41 @@ public  class  MatrixOptions : System.Windows.DependencyObject
 
 //========================================================================
 //
+//    Public Consts.
+//
+
+public  static  readonly  Brush     DEFAULT_BACKGROUND  =
+new  SolidColorBrush(Color.FromRgb(240, 240, 240));
+
+public  static  readonly  Brush     DEFAULT_BORDER_LINE =
+new  SolidColorBrush(Color.FromRgb(104, 140, 175));
+
+
+//========================================================================
+//
 //    Properties.
 //
+
+public  Brush  Background {
+    get { return  (Brush)GetValue(BackgroundProperty); }
+    set { SetValue(BackgroundProperty, value); }
+}
+
+public  Brush  BorderLine  {
+    get { return  (Brush)GetValue(BorderLineProperty); }
+    set { SetValue(BorderLineProperty, value); }
+}
+
+
+public  Brush  GridBackground  {
+    get { return  (Brush)GetValue(GridBackgroundProperty); }
+    set { SetValue(GridBackgroundProperty, value); }
+}
+
+public  Brush  GridLine  {
+    get { return  (Brush)GetValue(GridLineProperty); }
+    set { SetValue(GridLineProperty, value); }
+}
 
 
 //========================================================================
@@ -39,6 +72,40 @@ public  class  MatrixOptions : System.Windows.DependencyObject
 private  const  FrameworkPropertyMetadataOptions
 AFFECTS_RENDER =
         FrameworkPropertyMetadataOptions.AffectsRender;
+
+
+public  static  readonly  DependencyProperty  BackgroundProperty =
+DependencyProperty.Register(
+        nameof(Background), typeof(Brush), typeof(MatrixOptions),
+        new FrameworkPropertyMetadata(DEFAULT_BACKGROUND, AFFECTS_RENDER)
+);
+
+public  static  readonly  DependencyProperty  BorderLineProperty =
+DependencyProperty.Register(
+        nameof(BorderLine), typeof(Brush), typeof(MatrixDisplay),
+        new FrameworkPropertyMetadata(DEFAULT_BORDER_LINE, AFFECTS_RENDER)
+);
+
+public  static  readonly  DependencyProperty  GridBackgroundProperty =
+DependencyProperty.Register(
+        nameof(GridBackground), typeof(Brush), typeof(MatrixDisplay),
+        new FrameworkPropertyMetadata(Brushes.White, AFFECTS_RENDER)
+);
+
+
+public  static  readonly  DependencyProperty  GridLineProperty =
+DependencyProperty.Register(
+            nameof(GridLine), typeof(Brush), typeof(MatrixDisplay),
+        new FrameworkPropertyMetadata(Brushes.Black, AFFECTS_RENDER)
+);
+
+
+//========================================================================
+//
+//    Event Handlers.
+//
+
+
 
 }   //  End op class  MatrixOptions
 
