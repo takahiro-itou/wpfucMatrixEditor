@@ -23,7 +23,7 @@ namespace  WpfControl.Editor  {
 //    MatrixOption  class
 //
 
-public  class  MatrixOption : System.Windows.DependencyObject
+public  class  MatrixOption : System.Windows.Freezable
 {
 
 //========================================================================
@@ -42,7 +42,6 @@ new  SolidColorBrush(Color.FromRgb(104, 140, 175));
 //
 //    Properties.
 //
-
 
 public  event   EventHandler?   PropertyChanged;
 
@@ -107,6 +106,22 @@ DependencyProperty.Register(
         new FrameworkPropertyMetadata(
                 Brushes.Black, OnInternalPropertyChanged)
 );
+
+
+//========================================================================
+//
+//    Protected Member Functions (Overrides).
+//
+
+//----------------------------------------------------------------
+/**
+**
+**/
+protected  override  Freezable
+CreateInstanceCore()
+{
+    return  new MatrixOption();
+}
 
 
 //========================================================================

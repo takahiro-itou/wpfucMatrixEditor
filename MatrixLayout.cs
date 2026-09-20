@@ -22,7 +22,7 @@ namespace  WpfControl.Editor  {
 //    MatrixLayout  class
 //
 
-public  class  MatrixLayout : System.Windows.DependencyObject
+public  class  MatrixLayout : System.Windows.Freezable
 {
 
 //========================================================================
@@ -92,6 +92,23 @@ DependencyProperty.Register(
     nameof(RowHeights), typeof(IList<double>), typeof(MatrixLayout),
     new FrameworkPropertyMetadata(null, OnInternalPropertyChanged)
 );
+
+
+//========================================================================
+//
+//    Protected Member Functions (Overrides).
+//
+
+//----------------------------------------------------------------
+/**
+**
+**/
+protected  override  Freezable
+CreateInstanceCore()
+{
+    return  new MatrixLayout();
+}
+
 
 //========================================================================
 //
