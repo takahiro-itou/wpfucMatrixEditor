@@ -45,6 +45,8 @@ public  MatrixDisplay()
     //  デバイスの物理ピクセルに配置を強制する  //
     this.SnapsToDevicePixels  = true;
     this.UseLayoutRounding    = true;
+    this.Layouts = new MatrixLayout();
+    this.Options = new MatrixOption();
 }
 
 
