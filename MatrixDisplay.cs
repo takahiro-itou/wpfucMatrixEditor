@@ -134,9 +134,29 @@ public  double  DefaultCellWidth  {
     set { SetValue(DefaultCellWidthProperty, value); }
 }
 
+//----------------------------------------------------------------
+/**   レイアウトに関する設定をまとめたプロパティ。
+**
+**/
+public  MatrixLayout   Layout
+{
+    get { return  (MatrixLayout)GetValue(LayoutProperty); }
+    set { SetValue(LayoutProperty, value); }
+}
+
 public  MatrixCellData[]?  MatrixData  {
     get { return  (MatrixCellData[]?)GetValue(MatrixDataProperty); }
     set { SetValue(MatrixDataProperty, value); }
+}
+
+//----------------------------------------------------------------
+/**   表示等に関する設定をまとめたプロパティ。
+**
+**/
+public  MatrixOptions  Options
+{
+    get { return  (MatrixOptions)GetValue(OptionsProperty); }
+    set { SetValue(OptionsProperty, value); }
 }
 
 
@@ -192,17 +212,23 @@ DependencyProperty.Register(
 );
 
 
-public  static  readonly  DependencyProperty  MatrixDataProperty =
+public  static  readonly  DependencyProperty  LayoutProperty =
 DependencyProperty.Register(
-        nameof(MatrixData), typeof(MatrixCellData[]), typeof(MatrixDisplay),
-        new FrameworkPropertyMetadata(null, AFFECTS_LAYOUT)
+    nameof(Layout), typeof(MatrixLayout), typeof(MatrixDisplay),
+    new FrameworkPropertyMetadata(null, AFFECTS_RENDER, OnLayoutChanged)
 );
 
-public  static  readonly  DependencyProperty  MatrixOptionsProperty =
+
+public  static  readonly  DependencyProperty  MatrixDataProperty =
 DependencyProperty.Register(
-        nameof(Options), typeof(MatrixOptions), typeof(MatrixDisplay),
-        new FrameworkPropertyMetadata(
-                null, AFFECTS_RENDER, OnMatrixOptionsChanged)
+    nameof(MatrixData), typeof(MatrixCellData[]), typeof(MatrixDisplay),
+    new FrameworkPropertyMetadata(null, AFFECTS_LAYOUT)
+);
+
+public  static  readonly  DependencyProperty  OptionsProperty =
+DependencyProperty.Register(
+    nameof(Options), typeof(MatrixOptions), typeof(MatrixDisplay),
+    new FrameworkPropertyMetadata(null, AFFECTS_RENDER, OnOptionsChanged)
 );
 
 
@@ -263,10 +289,10 @@ OnRender(System.Windows.Media.DrawingContext  dc)
     ));
 
     //  背景塗りつぶし  //
-    Pen penBorder = new Pen(this.BorderLine, 1.0);
+    Pen penBorder = new Pen(this.Options.BorderLine, 1.0);
 
     dc.DrawRectangle(
-            this.Background,
+            this.Options.Background,
             penBorder,
             new Rect(
                 0.5,  0.5,
@@ -288,7 +314,7 @@ OnRender(System.Windows.Media.DrawingContext  dc)
             SystemFonts.CaptionFontFamily,
             FontStyles.Normal,  FontWeights.Normal, FontStretches.Normal);
     double fontSize = 12;
-    Pen gridPen = new Pen(this.GridLine, 0.5);
+    Pen gridPen = new Pen(this.Options.GridLine, 0.5);
 
     for ( int r = startRow; r <= endRow; ++ r ) {
         double  absoluteY = this.m_rowPos[r];
@@ -390,8 +416,17 @@ OnColumnWidthsChanged(
     ((MatrixDisplay)d).updateColumnPositions();
 }
 
+
 private  static  void
-OnMatrixOptionsChanged(
+OnLayoutChanged(
+        DependencyObject                    d,
+        DependencyPropertyChangedEventArgs  e)
+{
+}
+
+
+private  static  void
+OnOptionsChanged(
         DependencyObject                    d,
         DependencyPropertyChangedEventArgs  e)
 {
