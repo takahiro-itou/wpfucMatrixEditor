@@ -73,9 +73,9 @@ new  SolidColorBrush(Color.FromRgb(104, 140, 175));
 public  double
 getColWidth(int c)
 {
-    IList<double>   colSize = this.Layout.ColumnWidths;
+    IList<double>   colSize = this.Layouts.ColumnWidths;
     return ( (colSize != null && c < colSize.Count)
-            ? colSize[c] : this.Layout.DefaultCellWidth );
+            ? colSize[c] : this.Layouts.DefaultCellWidth );
 }
 
 //----------------------------------------------------------------
@@ -86,9 +86,9 @@ getColWidth(int c)
 public  double
 getRowHeight(int r)
 {
-    IList<double>   rowSize = this.Layout.RowHeights;
+    IList<double>   rowSize = this.Layouts.RowHeights;
     return ( (rowSize != null && r < rowSize.Count)
-            ? rowSize[r] : this.Layout.DefaultCellHeight );
+            ? rowSize[r] : this.Layouts.DefaultCellHeight );
 }
 
 
@@ -109,12 +109,12 @@ public  override  double  ExtentHeight
 
 public  override  double  SmallChangeX
 {
-    get { return  this.Layout.DefaultCellWidth; }
+    get { return  this.Layouts.DefaultCellWidth; }
 }
 
 public  override  double  SmallChangeY
 {
-    get { return  this.Layout.DefaultCellHeight; }
+    get { return  this.Layouts.DefaultCellHeight; }
 }
 
 
@@ -133,10 +133,10 @@ public  int  Columns  {
 /**   レイアウトに関する設定をまとめたプロパティ。
 **
 **/
-public  MatrixLayout   Layout
+public  MatrixLayout   Layouts
 {
-    get { return  (MatrixLayout)GetValue(LayoutProperty); }
-    set { SetValue(LayoutProperty, value); }
+    get { return  (MatrixLayout)GetValue(LayoutsProperty); }
+    set { SetValue(LayoutsProperty, value); }
 }
 
 public  MatrixCellData[]?  MatrixData  {
@@ -148,9 +148,9 @@ public  MatrixCellData[]?  MatrixData  {
 /**   表示等に関する設定をまとめたプロパティ。
 **
 **/
-public  MatrixOptions  Options
+public  MatrixOption  Options
 {
-    get { return  (MatrixOptions)GetValue(OptionsProperty); }
+    get { return  (MatrixOption)GetValue(OptionsProperty); }
     set { SetValue(OptionsProperty, value); }
 }
 
@@ -182,10 +182,10 @@ DependencyProperty.Register(
 );
 
 
-public  static  readonly  DependencyProperty  LayoutProperty =
+public  static  readonly  DependencyProperty  LayoutsProperty =
 DependencyProperty.Register(
-    nameof(Layout), typeof(MatrixLayout), typeof(MatrixDisplay),
-    new FrameworkPropertyMetadata(null, AFFECTS_RENDER, OnLayoutChanged)
+    nameof(Layouts), typeof(MatrixLayout), typeof(MatrixDisplay),
+    new FrameworkPropertyMetadata(null, AFFECTS_RENDER, OnLayoutsChanged)
 );
 
 
@@ -197,7 +197,7 @@ DependencyProperty.Register(
 
 public  static  readonly  DependencyProperty  OptionsProperty =
 DependencyProperty.Register(
-    nameof(Options), typeof(MatrixOptions), typeof(MatrixDisplay),
+    nameof(Options), typeof(MatrixOption), typeof(MatrixDisplay),
     new FrameworkPropertyMetadata(null, AFFECTS_RENDER, OnOptionsChanged)
 );
 
@@ -380,7 +380,7 @@ OnColumnWidthsChanged(
 
 
 private  static  void
-OnLayoutChanged(
+OnLayoutsChanged(
         DependencyObject                    d,
         DependencyPropertyChangedEventArgs  e)
 {
@@ -401,10 +401,10 @@ OnOptionsChanged(
         DependencyPropertyChangedEventArgs  e)
 {
     if ( d is MatrixDisplay display ) {
-        if ( e.OldValue is MatrixOptions oldOptions ) {
+        if ( e.OldValue is MatrixOption oldOptions ) {
             oldOptions.PropertyChanged -= display.OnOptionsPropertyChanged;
         }
-        if ( e.NewValue is MatrixOptions newOptions ) {
+        if ( e.NewValue is MatrixOption newOptions ) {
             newOptions.PropertyChanged += display.OnOptionsPropertyChanged;
        }
     }

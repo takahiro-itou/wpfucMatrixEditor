@@ -6,7 +6,6 @@
 >
   <!--  共通のテンプレート  -->
   <Style
-      x:Key="BaseMatrixViewerStyle"
       TargetType="{x:Type editor:MatrixViewer}" >
     <Setter Property="Template">
       <Setter.Value>
@@ -18,10 +17,8 @@
           >
             <editor:MatrixDisplay
                 x:Name="PART_MatrixDisplay"
-                Columns="{TemplateBinding Columns}"
-                ColumnWidths="{TemplateBinding ColumnWidths}"
-                RowHeights="{TemplateBinding RowHeights}"
-                Rows="{TemplateBinding Rows}"
+                Layouts="{TemplateBinding Layouts}"
+                Options="{TemplateBinding Options}"
             >
             </editor:MatrixDisplay>
           </ScrollViewer>

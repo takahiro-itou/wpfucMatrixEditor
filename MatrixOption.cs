@@ -20,10 +20,10 @@ namespace  WpfControl.Editor  {
 
 //========================================================================
 //
-//    MatrixOptions  class
+//    MatrixOption  class
 //
 
-public  class  MatrixOptions : System.Windows.DependencyObject
+public  class  MatrixOption : System.Windows.DependencyObject
 {
 
 //========================================================================
@@ -81,21 +81,21 @@ AFFECTS_RENDER =
 
 public  static  readonly  DependencyProperty  BackgroundProperty =
 DependencyProperty.Register(
-        nameof(Background), typeof(Brush), typeof(MatrixOptions),
+        nameof(Background), typeof(Brush), typeof(MatrixOption),
         new FrameworkPropertyMetadata(
                 DEFAULT_BACKGROUND, OnInternalPropertyChanged)
 );
 
 public  static  readonly  DependencyProperty  BorderLineProperty =
 DependencyProperty.Register(
-        nameof(BorderLine), typeof(Brush), typeof(MatrixOptions),
+        nameof(BorderLine), typeof(Brush), typeof(MatrixOption),
         new FrameworkPropertyMetadata(
                 DEFAULT_BORDER_LINE, OnInternalPropertyChanged)
 );
 
 public  static  readonly  DependencyProperty  GridBackgroundProperty =
 DependencyProperty.Register(
-        nameof(GridBackground), typeof(Brush), typeof(MatrixOptions),
+        nameof(GridBackground), typeof(Brush), typeof(MatrixOption),
         new FrameworkPropertyMetadata(
                 Brushes.White, OnInternalPropertyChanged)
 );
@@ -103,7 +103,7 @@ DependencyProperty.Register(
 
 public  static  readonly  DependencyProperty  GridLineProperty =
 DependencyProperty.Register(
-            nameof(GridLine), typeof(Brush), typeof(MatrixOptions),
+            nameof(GridLine), typeof(Brush), typeof(MatrixOption),
         new FrameworkPropertyMetadata(
                 Brushes.Black, OnInternalPropertyChanged)
 );
@@ -119,12 +119,12 @@ OnInternalPropertyChanged(
         DependencyObject                    d,
         DependencyPropertyChangedEventArgs  e)
 {
-    if ( d is MatrixOptions options ) {
+    if ( d is MatrixOption options ) {
         options.PropertyChanged?.Invoke(options, EventArgs.Empty);
     }
 }
 
 
-}   //  End op class  MatrixOptions
+}   //  End op class  MatrixOption
 
 }   //  End of namespace  WpfControl.Editor

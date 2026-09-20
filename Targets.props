@@ -6,7 +6,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)MatrixDisplay.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MatrixEditor.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MatrixLayout.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)MatrixOptions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MatrixOption.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MatrixViewer.cs" />
   </ItemGroup>
 
