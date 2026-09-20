@@ -83,13 +83,13 @@ DependencyProperty.Register(
 
 public  static  readonly  DependencyProperty  DefaultCellWidthProperty =
 DependencyProperty.Register(
-    nameof(DefaultCellWidth), typeof(double), typeof(MatrixDisplay),
+    nameof(DefaultCellWidth), typeof(double), typeof(MatrixLayout),
     new FrameworkPropertyMetadata(60.0, OnInternalPropertyChanged)
 );
 
 public  static  readonly  DependencyProperty  RowHeightsProperty =
 DependencyProperty.Register(
-    nameof(RowHeights), typeof(IList<double>), typeof(MatrixDisplay),
+    nameof(RowHeights), typeof(IList<double>), typeof(MatrixLayout),
     new FrameworkPropertyMetadata(null, OnInternalPropertyChanged)
 );
 
