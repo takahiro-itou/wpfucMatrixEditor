@@ -73,8 +73,9 @@ new  SolidColorBrush(Color.FromRgb(104, 140, 175));
 public  double
 getColWidth(int c)
 {
-    return ( (this.ColumnWidths != null && c < this.ColumnWidths.Count)
-            ? this.ColumnWidths[c] : DefaultCellWidth );
+    IList<double>   colSize = this.Layouts.ColumnWidths;
+    return ( (colSize != null && c < colSize.Count)
+            ? colSize[c] : this.Layouts.DefaultCellWidth );
 }
 
 //----------------------------------------------------------------
@@ -85,8 +86,9 @@ getColWidth(int c)
 public  double
 getRowHeight(int r)
 {
-    return ( (this.RowHeights != null && r < this.RowHeights.Count)
-            ? this.RowHeights[r] : this.DefaultCellHeight );
+    IList<double>   rowSize = this.Layouts.RowHeights;
+    return ( (rowSize != null && r < rowSize.Count)
+            ? rowSize[r] : this.Layouts.DefaultCellHeight );
 }
 
 
@@ -95,17 +97,25 @@ getRowHeight(int r)
 //    Properties (Overrides).
 //
 
-public  override  double  ExtentWidth  {
+public  override  double  ExtentWidth
+{
     get { return  this.m_totalWidth; }
 }
 
-public  override  double  ExtentHeight  {
+public  override  double  ExtentHeight
+{
     get { return  this.m_totalHeight; }
 }
 
-public  override  double  SmallChangeX => DefaultCellWidth;
+public  override  double  SmallChangeX
+{
+    get { return  this.Layouts.DefaultCellWidth; }
+}
 
-public  override  double  SmallChangeY => DefaultCellHeight;
+public  override  double  SmallChangeY
+{
+    get { return  this.Layouts.DefaultCellHeight; }
+}
 
 
 //========================================================================
@@ -113,51 +123,35 @@ public  override  double  SmallChangeY => DefaultCellHeight;
 //    Properties.
 //
 
-public  double  DefaultCellWidth  { get; set; } = 60.0;
-public  double  DefaultCellHeight { get; set; } = 25.0;
-
-public  Brush  Background {
-    get { return  (Brush)GetValue(BackgroundProperty); }
-    set { SetValue(BackgroundProperty, value); }
-}
-
-public  Brush  BorderLine  {
-    get { return  (Brush)GetValue(BorderLineProperty); }
-    set { SetValue(BorderLineProperty, value); }
-}
-
 
 public  int  Columns  {
     get { return  (int)GetValue(ColumnsProperty); }
     set { SetValue(ColumnsProperty, value); }
 }
 
-public  IList<double>  ColumnWidths  {
-    get { return  (IList<double>)GetValue(ColumnWidthsProperty); }
-    set { SetValue(ColumnWidthsProperty, value); }
+//----------------------------------------------------------------
+/**   レイアウトに関する設定をまとめたプロパティ。
+**
+**/
+public  MatrixLayout   Layouts
+{
+    get { return  (MatrixLayout)GetValue(LayoutsProperty); }
+    set { SetValue(LayoutsProperty, value); }
 }
-
-
-public  Brush  GridBackground  {
-    get { return  (Brush)GetValue(GridBackgroundProperty); }
-    set { SetValue(GridBackgroundProperty, value); }
-}
-
-public  Brush  GridLine  {
-    get { return  (Brush)GetValue(GridLineProperty); }
-    set { SetValue(GridLineProperty, value); }
-}
-
 
 public  MatrixCellData[]?  MatrixData  {
     get { return  (MatrixCellData[]?)GetValue(MatrixDataProperty); }
     set { SetValue(MatrixDataProperty, value); }
 }
 
-
-public  IList<double>  RowHeights  {
-    get { return  (IList<double>)GetValue(RowHeightsProperty); }
-    set { SetValue(RowHeightsProperty, value); }
+//----------------------------------------------------------------
+/**   表示等に関する設定をまとめたプロパティ。
+**
+**/
+public  MatrixOption  Options
+{
+    get { return  (MatrixOption)GetValue(OptionsProperty); }
+    set { SetValue(OptionsProperty, value); }
 }
 
 public  int  Rows  {
@@ -165,10 +159,15 @@ public  int  Rows  {
     set { SetValue(RowsProperty, value); }
 }
 
+
 //========================================================================
 //
 //    Dependency Properties.
 //
+
+private  const  FrameworkPropertyMetadataOptions
+META_INHERITS =
+FrameworkPropertyMetadataOptions.Inherits;
 
 private  const  FrameworkPropertyMetadataOptions
 AFFECTS_RENDER =
@@ -180,62 +179,38 @@ AFFECTS_LAYOUT =
         AFFECTS_RENDER;
 
 
-public  static  readonly  DependencyProperty  BackgroundProperty =
-DependencyProperty.Register(
-        nameof(Background), typeof(Brush), typeof(MatrixDisplay),
-        new FrameworkPropertyMetadata(DEFAULT_BACKGROUND, AFFECTS_RENDER)
-);
-
-public  static  readonly  DependencyProperty  BorderLineProperty =
-DependencyProperty.Register(
-        nameof(BorderLine), typeof(Brush), typeof(MatrixDisplay),
-        new FrameworkPropertyMetadata(DEFAULT_BORDER_LINE, AFFECTS_RENDER)
-);
-
-
 public  static  readonly  DependencyProperty  ColumnsProperty =
-DependencyProperty.Register(
+DependencyProperty.RegisterAttached(
         nameof(Columns), typeof(int), typeof(MatrixDisplay),
-        new FrameworkPropertyMetadata(0, AFFECTS_LAYOUT)
+        new FrameworkPropertyMetadata(0, META_INHERITS | AFFECTS_LAYOUT)
 );
 
-public  static  readonly  DependencyProperty  ColumnWidthsProperty =
+
+public  static  readonly  DependencyProperty  LayoutsProperty =
 DependencyProperty.Register(
-        nameof(ColumnWidths), typeof(IList<double>), typeof(MatrixDisplay),
-        new FrameworkPropertyMetadata(
-                null, AFFECTS_LAYOUT, OnColumnWidthsChanged)
+    nameof(Layouts), typeof(MatrixLayout), typeof(MatrixDisplay),
+    new FrameworkPropertyMetadata(
+            null, AFFECTS_RENDER, OnLayoutsChanged, coerceLayouts)
 );
 
-public  static  readonly  DependencyProperty  GridBackgroundProperty =
-DependencyProperty.Register(
-        nameof(GridBackground), typeof(Brush), typeof(MatrixDisplay),
-        new FrameworkPropertyMetadata(Brushes.White, AFFECTS_RENDER)
-);
-
-
-public  static  readonly  DependencyProperty  GridLineProperty =
-DependencyProperty.Register(
-        nameof(GridLine), typeof(Brush), typeof(MatrixDisplay),
-        new FrameworkPropertyMetadata(Brushes.Black, AFFECTS_RENDER)
-);
 
 public  static  readonly  DependencyProperty  MatrixDataProperty =
 DependencyProperty.Register(
-        nameof(MatrixData), typeof(MatrixCellData[]), typeof(MatrixDisplay),
-        new FrameworkPropertyMetadata(null, AFFECTS_LAYOUT)
+    nameof(MatrixData), typeof(MatrixCellData[]), typeof(MatrixDisplay),
+    new FrameworkPropertyMetadata(null, AFFECTS_LAYOUT)
 );
 
-public  static  readonly  DependencyProperty  RowHeightsProperty =
+public  static  readonly  DependencyProperty  OptionsProperty =
 DependencyProperty.Register(
-        nameof(RowHeights), typeof(IList<double>), typeof(MatrixDisplay),
-        new FrameworkPropertyMetadata(
-                null, AFFECTS_LAYOUT, OnRowHeightsChanged)
+    nameof(Options), typeof(MatrixOption), typeof(MatrixDisplay),
+    new FrameworkPropertyMetadata(
+            null, AFFECTS_RENDER, OnOptionsChanged, coerceOptions)
 );
 
 public  static  readonly  DependencyProperty  RowsProperty =
-DependencyProperty.Register(
+DependencyProperty.RegisterAttached(
         nameof(Rows), typeof(int), typeof(MatrixDisplay),
-        new FrameworkPropertyMetadata(0, AFFECTS_LAYOUT)
+        new FrameworkPropertyMetadata(0, META_INHERITS | AFFECTS_LAYOUT)
 );
 
 
@@ -282,10 +257,10 @@ OnRender(System.Windows.Media.DrawingContext  dc)
     ));
 
     //  背景塗りつぶし  //
-    Pen penBorder = new Pen(this.BorderLine, 1.0);
+    Pen penBorder = new Pen(this.Options.BorderLine, 1.0);
 
     dc.DrawRectangle(
-            this.Background,
+            this.Options.Background,
             penBorder,
             new Rect(
                 0.5,  0.5,
@@ -307,7 +282,7 @@ OnRender(System.Windows.Media.DrawingContext  dc)
             SystemFonts.CaptionFontFamily,
             FontStyles.Normal,  FontWeights.Normal, FontStretches.Normal);
     double fontSize = 12;
-    Pen gridPen = new Pen(this.GridLine, 0.5);
+    Pen gridPen = new Pen(this.Options.GridLine, 0.5);
 
     for ( int r = startRow; r <= endRow; ++ r ) {
         double  absoluteY = this.m_rowPos[r];
@@ -361,6 +336,18 @@ OnRender(System.Windows.Media.DrawingContext  dc)
 **
 **/
 
+private  void
+OnOptionsPropertyChanged(object? sender, EventArgs e)
+{
+    this.InvalidateMeasure();
+    this.InvalidateVisual();
+}
+
+//----------------------------------------------------------------
+/**
+**
+**/
+
 private  static  int
 getIndexFromCache(
         List<double>    posCache,
@@ -389,12 +376,63 @@ getRowIndexAtY(double  y)
 }
 
 
+private  static  object
+coerceLayouts(DependencyObject d, object baseValue)
+{
+    if ( baseValue == null ) {
+        return  new MatrixLayout();
+    }
+    return ( baseValue );
+}
+
+private  static  object
+coerceOptions(DependencyObject d, object baseValue)
+{
+    if ( baseValue == null ) {
+        return  new MatrixOption();
+    }
+    return ( baseValue );
+}
+
+
 private  static  void
 OnColumnWidthsChanged(
         DependencyObject                    d,
         DependencyPropertyChangedEventArgs  e)
 {
     ((MatrixDisplay)d).updateColumnPositions();
+}
+
+
+private  static  void
+OnLayoutsChanged(
+        DependencyObject                    d,
+        DependencyPropertyChangedEventArgs  e)
+{
+    if ( d is MatrixDisplay display ) {
+        if ( e.OldValue is MatrixLayout oldLayouts ) {
+            oldLayouts.PropertyChanged -= display.OnOptionsPropertyChanged;
+        }
+        if ( e.NewValue is MatrixLayout newLayouts ) {
+            newLayouts.PropertyChanged += display.OnOptionsPropertyChanged;
+       }
+    }
+}
+
+
+private  static  void
+OnOptionsChanged(
+        DependencyObject                    d,
+        DependencyPropertyChangedEventArgs  e)
+{
+    if ( d is MatrixDisplay display ) {
+        if ( e.OldValue is MatrixOption oldOptions ) {
+            oldOptions.PropertyChanged -= display.OnOptionsPropertyChanged;
+        }
+        if ( e.NewValue is MatrixOption newOptions ) {
+            newOptions.PropertyChanged += display.OnOptionsPropertyChanged;
+       }
+    }
 }
 
 private  static  void
