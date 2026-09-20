@@ -12,6 +12,8 @@
 **                                                                      **
 *************************************************************************/
 
+using   System.Windows;
+
 
 namespace  WpfControl.Editor  {
 
@@ -20,9 +22,23 @@ namespace  WpfControl.Editor  {
 //    MatrixOptions  class
 //
 
-public  class  MatrixOptions
+public  class  MatrixOptions : System.Windows.DependencyObject
 {
 
+//========================================================================
+//
+//    Properties.
+//
+
+
+//========================================================================
+//
+//    Dependency Properties.
+//
+
+private  const  FrameworkPropertyMetadataOptions
+AFFECTS_RENDER =
+        FrameworkPropertyMetadataOptions.AffectsRender;
 
 }   //  End op class  MatrixOptions
 
