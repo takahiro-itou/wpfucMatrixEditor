@@ -377,7 +377,7 @@ getRowIndexAtY(double  y)
 
 
 private  static  object
-coerceLayouts(DependencyProperty d, object baseValue)
+coerceLayouts(DependencyObject d, object baseValue)
 {
     if ( baseValue == null ) {
         return  new MatrixLayout();
@@ -386,7 +386,7 @@ coerceLayouts(DependencyProperty d, object baseValue)
 }
 
 private  static  object
-coerceOptions(DependencyProperty d, object baseValue)
+coerceOptions(DependencyObject d, object baseValue)
 {
     if ( baseValue == null ) {
         return  new MatrixOption();
