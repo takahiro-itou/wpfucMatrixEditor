@@ -45,8 +45,6 @@ public  MatrixDisplay()
     //  デバイスの物理ピクセルに配置を強制する  //
     this.SnapsToDevicePixels  = true;
     this.UseLayoutRounding    = true;
-    this.Layouts = new MatrixLayout();
-    this.Options = new MatrixOption();
 }
 
 
@@ -191,7 +189,8 @@ DependencyProperty.RegisterAttached(
 public  static  readonly  DependencyProperty  LayoutsProperty =
 DependencyProperty.Register(
     nameof(Layouts), typeof(MatrixLayout), typeof(MatrixDisplay),
-    new FrameworkPropertyMetadata(null, AFFECTS_RENDER, OnLayoutsChanged)
+    new FrameworkPropertyMetadata(
+            null, AFFECTS_RENDER, OnLayoutsChanged, coerceLayouts)
 );
 
 
@@ -204,7 +203,8 @@ DependencyProperty.Register(
 public  static  readonly  DependencyProperty  OptionsProperty =
 DependencyProperty.Register(
     nameof(Options), typeof(MatrixOption), typeof(MatrixDisplay),
-    new FrameworkPropertyMetadata(null, AFFECTS_RENDER, OnOptionsChanged)
+    new FrameworkPropertyMetadata(
+            null, AFFECTS_RENDER, OnOptionsChanged, coerceOptions)
 );
 
 public  static  readonly  DependencyProperty  RowsProperty =
@@ -373,6 +373,25 @@ private  int
 getRowIndexAtY(double  y)
 {
     return  getIndexFromCache(this.m_rowPos, y, this.Rows);
+}
+
+
+private  static  object
+coerceLayouts(DependencyProperty d, object baseValue)
+{
+    if ( baseValue == null ) {
+        return  new MatrixLayout();
+    }
+    return ( baseValue );
+}
+
+private  static  object
+coerceOptions(DependencyProperty d, object baseValue)
+{
+    if ( baseValue == null ) {
+        return  new MatrixOption();
+    }
+    return ( baseValue );
 }
 
 
