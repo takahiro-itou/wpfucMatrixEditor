@@ -12,6 +12,8 @@
 **                                                                      **
 *************************************************************************/
 
+using   System.Windows;
+
 
 namespace  WpfControl.Editor  {
 
@@ -20,9 +22,28 @@ namespace  WpfControl.Editor  {
 //    MatrixLayout  class
 //
 
-public  class  MatrixLayout
+public  class  MatrixLayout : System.Windows.DependencyObject
 {
 
+//========================================================================
+//
+//    Properties.
+//
+
+
+//========================================================================
+//
+//    Dependency Properties.
+//
+
+private  const  FrameworkPropertyMetadataOptions
+AFFECTS_RENDER =
+        FrameworkPropertyMetadataOptions.AffectsRender;
+
+private  const  FrameworkPropertyMetadataOptions
+AFFECTS_LAYOUT =
+        FrameworkPropertyMetadataOptions.AffectsMeasure |
+        AFFECTS_RENDER;
 
 }   //  End op class  MatrixLayout
 
