@@ -120,7 +120,6 @@ OnInternalPropertyChanged(
         DependencyPropertyChangedEventArgs  e)
 {
     if ( d is MatrixOptions options ) {
-    {
         options.PropertyChanged?.Invoke(options, EventArgs.Empty);
     }
 }
