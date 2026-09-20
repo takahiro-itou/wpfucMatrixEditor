@@ -166,6 +166,10 @@ public  int  Rows  {
 //
 
 private  const  FrameworkPropertyMetadataOptions
+META_INHERITS =
+FrameworkPropertyMetadataOptions.Inherits;
+
+private  const  FrameworkPropertyMetadataOptions
 AFFECTS_RENDER =
         FrameworkPropertyMetadataOptions.AffectsRender;
 
@@ -176,9 +180,9 @@ AFFECTS_LAYOUT =
 
 
 public  static  readonly  DependencyProperty  ColumnsProperty =
-DependencyProperty.Register(
+DependencyProperty.RegisterAttached(
         nameof(Columns), typeof(int), typeof(MatrixDisplay),
-        new FrameworkPropertyMetadata(0, AFFECTS_LAYOUT)
+        new FrameworkPropertyMetadata(0, META_INHERITS | AFFECTS_LAYOUT)
 );
 
 
@@ -202,9 +206,9 @@ DependencyProperty.Register(
 );
 
 public  static  readonly  DependencyProperty  RowsProperty =
-DependencyProperty.Register(
+DependencyProperty.RegisterAttached(
         nameof(Rows), typeof(int), typeof(MatrixDisplay),
-        new FrameworkPropertyMetadata(0, AFFECTS_LAYOUT)
+        new FrameworkPropertyMetadata(0, META_INHERITS | AFFECTS_LAYOUT)
 );
 
 
