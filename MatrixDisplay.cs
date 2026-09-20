@@ -113,16 +113,6 @@ public  override  double  SmallChangeY => DefaultCellHeight;
 //    Properties.
 //
 
-public  Brush  Background {
-    get { return  (Brush)GetValue(BackgroundProperty); }
-    set { SetValue(BackgroundProperty, value); }
-}
-
-public  Brush  BorderLine  {
-    get { return  (Brush)GetValue(BorderLineProperty); }
-    set { SetValue(BorderLineProperty, value); }
-}
-
 
 public  int  Columns  {
     get { return  (int)GetValue(ColumnsProperty); }
@@ -134,7 +124,6 @@ public  IList<double>  ColumnWidths  {
     set { SetValue(ColumnWidthsProperty, value); }
 }
 
-
 public  double  DefaultCellHeight {
     get { return  (double)GetValue(DefaultCellHeightProperty); }
     set { SetValue(DefaultCellHeightProperty, value); }
@@ -144,18 +133,6 @@ public  double  DefaultCellWidth  {
     get { return  (double)GetValue(DefaultCellWidthProperty); }
     set { SetValue(DefaultCellWidthProperty, value); }
 }
-
-
-public  Brush  GridBackground  {
-    get { return  (Brush)GetValue(GridBackgroundProperty); }
-    set { SetValue(GridBackgroundProperty, value); }
-}
-
-public  Brush  GridLine  {
-    get { return  (Brush)GetValue(GridLineProperty); }
-    set { SetValue(GridLineProperty, value); }
-}
-
 
 public  MatrixCellData[]?  MatrixData  {
     get { return  (MatrixCellData[]?)GetValue(MatrixDataProperty); }
@@ -189,19 +166,6 @@ AFFECTS_LAYOUT =
         AFFECTS_RENDER;
 
 
-public  static  readonly  DependencyProperty  BackgroundProperty =
-DependencyProperty.Register(
-        nameof(Background), typeof(Brush), typeof(MatrixDisplay),
-        new FrameworkPropertyMetadata(DEFAULT_BACKGROUND, AFFECTS_RENDER)
-);
-
-public  static  readonly  DependencyProperty  BorderLineProperty =
-DependencyProperty.Register(
-        nameof(BorderLine), typeof(Brush), typeof(MatrixDisplay),
-        new FrameworkPropertyMetadata(DEFAULT_BORDER_LINE, AFFECTS_RENDER)
-);
-
-
 public  static  readonly  DependencyProperty  ColumnsProperty =
 DependencyProperty.Register(
         nameof(Columns), typeof(int), typeof(MatrixDisplay),
@@ -228,24 +192,19 @@ DependencyProperty.Register(
 );
 
 
-public  static  readonly  DependencyProperty  GridBackgroundProperty =
-DependencyProperty.Register(
-        nameof(GridBackground), typeof(Brush), typeof(MatrixDisplay),
-        new FrameworkPropertyMetadata(Brushes.White, AFFECTS_RENDER)
-);
-
-
-public  static  readonly  DependencyProperty  GridLineProperty =
-DependencyProperty.Register(
-        nameof(GridLine), typeof(Brush), typeof(MatrixDisplay),
-        new FrameworkPropertyMetadata(Brushes.Black, AFFECTS_RENDER)
-);
-
 public  static  readonly  DependencyProperty  MatrixDataProperty =
 DependencyProperty.Register(
         nameof(MatrixData), typeof(MatrixCellData[]), typeof(MatrixDisplay),
         new FrameworkPropertyMetadata(null, AFFECTS_LAYOUT)
 );
+
+public  static  readonly  DependencyProperty  MatrixOptionsProperty =
+DependencyProperty.Register(
+        nameof(Options), typeof(MatrixOptions), typeof(MatrixDisplay),
+        new FrameworkPropertyMetadata(
+                null, AFFECTS_RENDER, OnMatrixOptionsChanged)
+);
+
 
 public  static  readonly  DependencyProperty  RowHeightsProperty =
 DependencyProperty.Register(
@@ -383,6 +342,18 @@ OnRender(System.Windows.Media.DrawingContext  dc)
 **
 **/
 
+private  void
+OnOptionsPropertyChanged(object? sender, EventArgs e)
+{
+    this.InvalidateMeasure();
+    this.InvalidateVisual();
+}
+
+//----------------------------------------------------------------
+/**
+**
+**/
+
 private  static  int
 getIndexFromCache(
         List<double>    posCache,
@@ -417,6 +388,21 @@ OnColumnWidthsChanged(
         DependencyPropertyChangedEventArgs  e)
 {
     ((MatrixDisplay)d).updateColumnPositions();
+}
+
+private  static  void
+OnMatrixOptionsChanged(
+        DependencyObject                    d,
+        DependencyPropertyChangedEventArgs  e)
+{
+    if ( d is MatrixDisplay display ) {
+        if ( e.OldValue is MatrixOptions oldOptions ) {
+            oldOptions.PropertyChanged -= display.OnOptionsPropertyChanged;
+        }
+        if ( e.NewValue is MatrixOptions newOptions ) {
+            newOptions.PropertyChanged += display.OnOptionsPropertyChanged;
+       }
+    }
 }
 
 private  static  void
