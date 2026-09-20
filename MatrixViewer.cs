@@ -70,14 +70,36 @@ public  int  Columns  {
     set { SetValue(ColumnsProperty, value); }
 }
 
+public  ScrollBarVisibility  HorizontalScrollBarVisibility
+{
+    get => (ScrollBarVisibility)GetValue(HorizontalScrollBarVisibilityProperty);
+    set { SetValue(HorizontalScrollBarVisibilityProperty, value); }
+}
+
+public  MatrixLayout  Layouts {
+    get { return  (MatrixLayout)GetValue(LayoutsProperty); }
+    set { SetValue(LayoutsProperty, value); }
+}
+
 public  IList  MatrixData  {
     get { return  (IList)GetValue(MatrixDataProperty); }
     set { SetValue(MatrixDataProperty, value); }
 }
 
+public  MatrixOption  Options {
+    get { return  (MatrixOption)GetValue(OptionsProperty); }
+    set { SetValue(OptionsProperty, value); }
+}
+
 public  int  Rows  {
     get { return  (int)GetValue(RowsProperty); }
     set { SetValue(RowsProperty, value); }
+}
+
+public  ScrollBarVisibility  VerticalScrollBarVisibility
+{
+    get => (ScrollBarVisibility)GetValue(VerticalScrollBarVisibilityProperty);
+    set { SetValue(VerticalScrollBarVisibilityProperty, value); }
 }
 
 
