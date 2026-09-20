@@ -73,8 +73,9 @@ new  SolidColorBrush(Color.FromRgb(104, 140, 175));
 public  double
 getColWidth(int c)
 {
-    return ( (this.ColumnWidths != null && c < this.ColumnWidths.Count)
-            ? this.ColumnWidths[c] : DefaultCellWidth );
+    IList<double>   colSize = this.Layout.ColumnWidths;
+    return ( (colSize != null && c < colSize.Count)
+            ? colSize[c] : this.Layout.DefaultCellWidth );
 }
 
 //----------------------------------------------------------------
@@ -85,8 +86,9 @@ getColWidth(int c)
 public  double
 getRowHeight(int r)
 {
-    return ( (this.RowHeights != null && r < this.RowHeights.Count)
-            ? this.RowHeights[r] : this.DefaultCellHeight );
+    IList<double>   rowSize = this.Layout.RowHeights;
+    return ( (rowSize != null && r < rowSize.Count)
+            ? rowSize[r] : this.Layout.DefaultCellHeight );
 }
 
 
