@@ -114,6 +114,16 @@ DependencyProperty.Register(
 //    Event Handlers.
 //
 
+private  static  void
+OnInternalPropertyChanged(
+        DependencyObject                    d,
+        DependencyPropertyChangedEventArgs  e)
+{
+    if ( d is MatrixOptions options ) {
+    {
+        options.PropertyChanged?.Invoke(options, EventArgs.Empty);
+    }
+}
 
 
 }   //  End op class  MatrixOptions
