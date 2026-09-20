@@ -374,6 +374,14 @@ OnLayoutChanged(
         DependencyObject                    d,
         DependencyPropertyChangedEventArgs  e)
 {
+    if ( d is MatrixDisplay display ) {
+        if ( e.OldValue is MatrixLayout oldLayouts ) {
+            oldLayouts.PropertyChanged -= display.OnOptionsPropertyChanged;
+        }
+        if ( e.NewValue is MatrixLayout newLayouts ) {
+            newLayouts.PropertyChanged += display.OnOptionsPropertyChanged;
+       }
+    }
 }
 
 
