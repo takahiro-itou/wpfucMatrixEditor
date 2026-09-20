@@ -20,7 +20,7 @@ namespace  WpfControl.Editor  {
 //    MatrixLayout  class
 //
 
-public  clas  MatrixLayout
+public  class  MatrixLayout
 {
 
 

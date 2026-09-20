@@ -20,7 +20,7 @@ namespace  WpfControl.Editor  {
 //    MatrixOptions  class
 //
 
-public  clas  MatrixOptions
+public  class  MatrixOptions
 {
 
 
