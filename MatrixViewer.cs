@@ -65,9 +65,19 @@ OnApplyTemplate()
 //    Properties.
 //
 
+public  int  Columns  {
+    get { return  (int)GetValue(ColumnsProperty); }
+    set { SetValue(ColumnsProperty, value); }
+}
+
 public  IList  MatrixData  {
     get { return  (IList)GetValue(MatrixDataProperty); }
     set { SetValue(MatrixDataProperty, value); }
+}
+
+public  int  Rows  {
+    get { return  (int)GetValue(RowsProperty); }
+    set { SetValue(RowsProperty, value); }
 }
 
 

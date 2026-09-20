@@ -5,15 +5,14 @@
     xmlns:editor="clr-namespace:WpfControl.Editor"
 >
   <!--  共通のテンプレート  -->
-  <Style
-      TargetType="{x:Type editor:MatrixViewer}" >
+  <Style  TargetType="{x:Type editor:MatrixViewer}" >
     <Setter Property="Template">
       <Setter.Value>
         <ControlTemplate TargetType="{x:Type editor:MatrixViewer}">
           <ScrollViewer
               CanContentScroll="True"
-              HorizontalScrollBarVisibility="{TemplateBinding HorizontalScrollBarVisibility}"
-              VerticalScrollBarVisibility="{TemplateBinding VerticalScrollBarVisibility}"
+              HorizontalScrollBarVisibility="{Binding HorizontalScrollBarVisibility, RelativeSource={RelativeSource TeamplatedParent}}"
+              VerticalScrollBarVisibility="{Binding VerticalScrollBarVisibility, RelativeSource={RelativeSource TemplatedParent}}"
           >
             <editor:MatrixDisplay
                 x:Name="PART_MatrixDisplay"
@@ -28,15 +27,9 @@
     </Setter>
   </Style>
 
-  <!--  MatrixViewer  -->
-  <Style
-      BasedOn="{StaticResource BaseMatrixViewerStyle}"
-      TargetType="{x:Type editor:MatrixViewer}" >
-  </Style>
-
   <!--  MatrixEditor  -->
   <Style
-      BasedOn="{StaticResource BaseMatrixViewerStyle}"
+      BasedOn="{StaticResource {x:Type editor:MatrixViewer}}"
       TargetType="{x:Type editor:MatrixEditor}" >
   </Style>
 
