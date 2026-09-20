@@ -13,6 +13,7 @@
 *************************************************************************/
 
 using   System.Windows;
+using   System.Windows.Media;
 
 
 namespace  WpfControl.Editor  {
@@ -41,6 +42,10 @@ new  SolidColorBrush(Color.FromRgb(104, 140, 175));
 //
 //    Properties.
 //
+
+
+public  event   EventHandler?                   PropertyChanged;
+
 
 public  Brush  Background {
     get { return  (Brush)GetValue(BackgroundProperty); }
@@ -77,26 +82,30 @@ AFFECTS_RENDER =
 public  static  readonly  DependencyProperty  BackgroundProperty =
 DependencyProperty.Register(
         nameof(Background), typeof(Brush), typeof(MatrixOptions),
-        new FrameworkPropertyMetadata(DEFAULT_BACKGROUND, AFFECTS_RENDER)
+        new FrameworkPropertyMetadata(
+                DEFAULT_BACKGROUND, OnInternalPropertyChanged)
 );
 
 public  static  readonly  DependencyProperty  BorderLineProperty =
 DependencyProperty.Register(
-        nameof(BorderLine), typeof(Brush), typeof(MatrixDisplay),
-        new FrameworkPropertyMetadata(DEFAULT_BORDER_LINE, AFFECTS_RENDER)
+        nameof(BorderLine), typeof(Brush), typeof(MatrixOptions),
+        new FrameworkPropertyMetadata(
+                DEFAULT_BORDER_LINE, OnInternalPropertyChanged)
 );
 
 public  static  readonly  DependencyProperty  GridBackgroundProperty =
 DependencyProperty.Register(
-        nameof(GridBackground), typeof(Brush), typeof(MatrixDisplay),
-        new FrameworkPropertyMetadata(Brushes.White, AFFECTS_RENDER)
+        nameof(GridBackground), typeof(Brush), typeof(MatrixOptions),
+        new FrameworkPropertyMetadata(
+                Brushes.White, OnInternalPropertyChanged)
 );
 
 
 public  static  readonly  DependencyProperty  GridLineProperty =
 DependencyProperty.Register(
-            nameof(GridLine), typeof(Brush), typeof(MatrixDisplay),
-        new FrameworkPropertyMetadata(Brushes.Black, AFFECTS_RENDER)
+            nameof(GridLine), typeof(Brush), typeof(MatrixOptions),
+        new FrameworkPropertyMetadata(
+                Brushes.Black, OnInternalPropertyChanged)
 );
 
 
