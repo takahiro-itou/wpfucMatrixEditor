@@ -125,7 +125,8 @@ MatrixDisplay.ColumnsProperty.AddOwner(typeof(MatrixViewer));
 public  static  readonly  DependencyProperty
 HorizontalScrollBarVisibilityProperty =
 ScrollViewer.HorizontalScrollBarVisibilityProperty.AddOwner(
-        typeof(MatrixViewer)
+        typeof(MatrixViewer),
+        new FrameworkPropertyMetadata(ScrollBarVisibility.Auto)
 );
 
 public  static  readonly  DependencyProperty
@@ -153,7 +154,8 @@ MatrixDisplay.RowsProperty.AddOwner(typeof(MatrixViewer));
 public  static  readonly  DependencyProperty
 VerticalScrollBarVisibilityProperty =
 ScrollViewer.VerticalScrollBarVisibilityProperty.AddOwner(
-        typeof(MatrixViewer)
+        typeof(MatrixViewer),
+        new FrameworkPropertyMetadata(ScrollBarVisibility.Auto)
 );
 
 
