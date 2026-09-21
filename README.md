@@ -3,6 +3,10 @@
 ##  例
 
 ```
+  <Window.DataContext>
+    <local:MatrixDataModel />
+  </Window.DataContext>
+
     <local:MatrixViewer
         Grid.Column="0"  Grid.Row="0"
         MatrixData="{Binding MatrixData}"
@@ -20,3 +24,7 @@
       </local:MatrixViewer.Layouts>
     </local:MatrixViewer>
 ```
+
+ここで DataContext に指定している MatrixDataMode は
+https://github.com/takahiro-itou/WpfControlTest/blob/master/ViewVb/Models/MatrixDataModel.vb
+を参照。
