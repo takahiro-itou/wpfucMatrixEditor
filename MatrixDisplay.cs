@@ -339,6 +339,9 @@ OnRender(System.Windows.Media.DrawingContext  dc)
 private  void
 OnOptionsPropertyChanged(object? sender, EventArgs e)
 {
+    this.updateRowPositions();
+    this.updateColumnPositions();
+
     this.InvalidateMeasure();
     this.InvalidateVisual();
 }
