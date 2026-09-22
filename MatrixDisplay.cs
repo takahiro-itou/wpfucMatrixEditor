@@ -301,8 +301,8 @@ OnRender(System.Windows.Media.DrawingContext  dc)
             double  x = absoluteX - HorizontalOffset + 1.0;
             double  cW  = getColWidth(c);
 
-            Brush   bgBrush = dat.Background ?? Brushes.White;
-            Brush   fgBrush = dat.Foreground ?? Brushes.Black;
+            Brush   bgBrush = dat.BgBrush ?? Brushes.White;
+            Brush   fgBrush = dat.FgBrush ?? Brushes.Black;
 
             dc.DrawRectangle(
                      bgBrush, gridPen, new Rect(x, y, cW, rH));
