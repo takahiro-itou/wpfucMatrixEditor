@@ -12,7 +12,10 @@
 **                                                                      **
 *************************************************************************/
 
+using   System.Windows;
 using   System.Windows.Media;
+
+using   WpfHelper.Utils;
 
 
 namespace  WpfControl.Editor  {
@@ -39,12 +42,12 @@ public  VerticalAlignment       VerticalTextAlign   { get; set; }
 
 public  Color  BgColor {
     get => (BgBrush is SolidColorBrush scb) ? scb.Color : Color.White;
-    set { BrushBg = BrushCache.getBrush(value); }
+    set { BgBrush = BrushCache.getBrush(value); }
 }
 
 public  Color  FgColor {
-    get => (BrushFg is SolidColorBrush scb) ? scb.Color : Color.Black;
-    set { BrushFg = BrushCache.getBrush(value); }
+    get => (FgBrush is SolidColorBrush scb) ? scb.Color : Color.Black;
+    set { FgBrush = BrushCache.getBrush(value); }
 }
 
 
