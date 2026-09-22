@@ -269,6 +269,7 @@ OnRender(System.Windows.Media.DrawingContext  dc)
     );
 
     if ( this.MatrixData == null || Rows <= 0 || Columns <= 0) {
+        dc.Pop();
         return;
     }
 
