@@ -41,12 +41,12 @@ public  HorizontalAlignment     HorizontalTextAlign { get; set; }
 public  VerticalAlignment       VerticalTextAlign   { get; set; }
 
 public  Color  BgColor {
-    get => (BgBrush is SolidColorBrush scb) ? scb.Color : Color.White;
+    get => (BgBrush is SolidColorBrush scb) ? scb.Color : Colors.White;
     set { BgBrush = BrushCache.getBrush(value); }
 }
 
 public  Color  FgColor {
-    get => (FgBrush is SolidColorBrush scb) ? scb.Color : Color.Black;
+    get => (FgBrush is SolidColorBrush scb) ? scb.Color : Colors.Black;
     set { FgBrush = BrushCache.getBrush(value); }
 }
 
