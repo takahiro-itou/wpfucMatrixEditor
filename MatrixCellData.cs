@@ -30,9 +30,13 @@ namespace  WpfControl.Editor  {
 public  struct  MatrixCellData
 {
 
-public  System.String   Value { get; set; }
-public  Brush?          Background { get; set; }
-public  Brush?          Foreground { get; set; }
+public  System.String   Value   { get; set; }
+public  Color           BgColor { get; set; }
+public  Color           FgColor { get; set; }
+
+public  HorizontalAlignment     HorizontalTextAlign { get; set; }
+public  VerticalAlignment       VerticalTextAlign   { get; set; }
+
 
 }   //  End of struct  MatrixCellData
 
