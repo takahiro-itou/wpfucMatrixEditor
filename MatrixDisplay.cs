@@ -304,6 +304,12 @@ OnRender(System.Windows.Media.DrawingContext  dc)
             Brush   bgBrush = dat.BgBrush ?? Brushes.White;
             Brush   fgBrush = dat.FgBrush ?? Brushes.Black;
 
+            Thickness   celPad  = this.Options.TextPadding;
+            HorizontalAlignment  hAlign =
+                this.Options.HorizontalTextAlign;
+            VerticalAlignment    vAlign =
+                this.Options.VerticalTextAlign;
+
             dc.DrawRectangle(
                      bgBrush, gridPen, new Rect(x, y, cW, rH));
             FormattedText formattedText = new FormattedText(
@@ -314,10 +320,52 @@ OnRender(System.Windows.Media.DrawingContext  dc)
                     fontSize,
                     fgBrush,
                     VisualTreeHelper.GetDpi(this).PixelsPerDip);
-            //  中央揃えの座標計算。    //
-            double textX = x + (cW - formattedText.Width ) / 2;
-            double textY = y + (rH - formattedText.Height) / 2;
+
+            //  パディングと配置を考慮して描画位置を計算。  //
+            double  inX  = x + celPad.Left;
+            double  inY  = y + celPad.Top;
+            double  inW  = cW - (celPad.Left + celPad.Right);
+            double  inH  = rH - (celPad.Top + celPad.Bottom);
+
+            if ( inW < 0 ) { inW = 0; }
+            if ( inH < 0 ) { inH = 0; }
+
+            double  textX = inX;
+            double  textY = inY;
+
+            switch ( hAlign ) {
+            case  HorizontalAlignment.Center:
+                textX = inX + (inW - formattedText.Width) / 2;
+                break;
+            case  HorizontalAlignment.Right:
+                textX = inX + (inW - formattedText.Width);
+                break;
+            case  HorizontalAlignment.Stretch:
+            case  HorizontalAlignment.Left:
+            default:
+                textX = inX;
+                break;
+            }
+
+            switch ( vAlign ) {
+            case  VerticalAlignment.Center:
+                textY = inY + (inH - formattedText.Height) / 2;
+                break;
+            case  VerticalAlignment.Bottom:
+                textY = inY + (inH - formattedText.Height);
+                break;
+            case  VerticalAlignment.Stretch:
+            case  VerticalAlignment.Top:
+            default:
+                textY = inY;
+                break;
+            }
+
+            dc.PushClip(new RectangleGeometry(
+                new Rect(x + 0.5, y + 0.5, cW - 1.0, rH - 1.0)
+            ));
             dc.DrawText(formattedText, new Point(textX, textY));
+            dc.Pop();
         }
     }
 
