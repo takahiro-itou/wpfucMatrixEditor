@@ -36,9 +36,11 @@ public  struct  MatrixCellData
 public  System.String   Value   { get; set; }
 public  Brush?          BgBrush { get; set; }
 public  Brush?          FgBrush { get; set; }
+public  Thickness?      TextPadding { get; set; }
 
-public  HorizontalAlignment     HorizontalTextAlign { get; set; }
-public  VerticalAlignment       VerticalTextAlign   { get; set; }
+public  HorizontalAlignment?    HorizontalTextAlign { get; set; }
+public  VerticalAlignment?      VerticalTextAlign   { get; set; }
+
 
 public  Color  BgColor {
     get => (BgBrush is SolidColorBrush scb) ? scb.Color : Colors.White;

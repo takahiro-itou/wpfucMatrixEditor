@@ -304,11 +304,11 @@ OnRender(System.Windows.Media.DrawingContext  dc)
             Brush   bgBrush = dat.BgBrush ?? Brushes.White;
             Brush   fgBrush = dat.FgBrush ?? Brushes.Black;
 
-            Thickness   celPad  = this.Options.TextPadding;
+            Thickness   celPad  = dat.TextPadding ?? this.Options.TextPadding;
             HorizontalAlignment  hAlign =
-                this.Options.HorizontalTextAlign;
+                dat.HorizontalTextAlign ?? this.Options.HorizontalTextAlign;
             VerticalAlignment    vAlign =
-                this.Options.VerticalTextAlign;
+                dat.VerticalTextAlign ?? this.Options.VerticalTextAlign;
 
             dc.DrawRectangle(
                      bgBrush, gridPen, new Rect(x, y, cW, rH));
