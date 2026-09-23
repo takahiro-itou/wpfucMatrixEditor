@@ -15,6 +15,8 @@
 using   System.Windows;
 using   System.Windows.Media;
 
+using   WpfHelper.Utils;
+
 
 namespace  WpfControl.Editor  {
 
@@ -56,15 +58,37 @@ public  Brush  BorderLine  {
     set { SetValue(BorderLineProperty, value); }
 }
 
+public  Brush  GridBgBrush  {
+    get { return  (Brush)GetValue(GridBgBrushProperty); }
+    set { SetValue(GridBgBrushProperty, value); }
+}
 
-public  Brush  GridBackground  {
-    get { return  (Brush)GetValue(GridBackgroundProperty); }
-    set { SetValue(GridBackgroundProperty, value); }
+public  Color  GridBgColor  {
+    get => (GridBgBrush is SolidColorBrush scb) ? scb.Color : Colors.White;
+    set { GridBgBrush = BrushCache.GetBrush(value); }
 }
 
 public  Brush  GridLine  {
     get { return  (Brush)GetValue(GridLineProperty); }
     set { SetValue(GridLineProperty, value); }
+}
+
+
+public  HorizontalAlignment  HorizontalTextAlign  {
+    get {
+        return  (HorizontalAlignment)GetValue(HorizontalTextAlignProperty);
+    }
+    set { SetValue(HorizontalTextAlignProperty, value); }
+}
+
+public  Thickness  TextPadding  {
+    get { return  (Thickness)GetValue(TextPaddingProperty); }
+    set { SetValue(TextPaddingProperty, value); }
+}
+
+public  VerticalAlignment  VerticalTextAlign  {
+    get { return  (VerticalAlignment)GetValue(VerticalTextAlignProperty); }
+    set { SetValue(VerticalTextAlignProperty, value); }
 }
 
 
@@ -80,31 +104,53 @@ AFFECTS_RENDER =
 
 public  static  readonly  DependencyProperty  BackgroundProperty =
 DependencyProperty.Register(
-        nameof(Background), typeof(Brush), typeof(MatrixOption),
-        new FrameworkPropertyMetadata(
-                DEFAULT_BACKGROUND, OnInternalPropertyChanged)
+    nameof(Background), typeof(Brush), typeof(MatrixOption),
+    new FrameworkPropertyMetadata(
+            DEFAULT_BACKGROUND, OnInternalPropertyChanged)
 );
 
 public  static  readonly  DependencyProperty  BorderLineProperty =
 DependencyProperty.Register(
-        nameof(BorderLine), typeof(Brush), typeof(MatrixOption),
-        new FrameworkPropertyMetadata(
-                DEFAULT_BORDER_LINE, OnInternalPropertyChanged)
+    nameof(BorderLine), typeof(Brush), typeof(MatrixOption),
+    new FrameworkPropertyMetadata(
+            DEFAULT_BORDER_LINE, OnInternalPropertyChanged)
 );
 
-public  static  readonly  DependencyProperty  GridBackgroundProperty =
+public  static  readonly  DependencyProperty  GridBgBrushProperty =
 DependencyProperty.Register(
-        nameof(GridBackground), typeof(Brush), typeof(MatrixOption),
-        new FrameworkPropertyMetadata(
-                Brushes.White, OnInternalPropertyChanged)
+    nameof(GridBgBrush), typeof(Brush), typeof(MatrixOption),
+    new FrameworkPropertyMetadata(
+            Brushes.White, OnInternalPropertyChanged)
 );
-
 
 public  static  readonly  DependencyProperty  GridLineProperty =
 DependencyProperty.Register(
-            nameof(GridLine), typeof(Brush), typeof(MatrixOption),
-        new FrameworkPropertyMetadata(
-                Brushes.Black, OnInternalPropertyChanged)
+    nameof(GridLine), typeof(Brush), typeof(MatrixOption),
+    new FrameworkPropertyMetadata(
+            Brushes.Black, OnInternalPropertyChanged)
+);
+
+public  static  readonly  DependencyProperty  HorizontalTextAlignProperty =
+DependencyProperty.Register(
+    nameof(HorizontalTextAlign), typeof(HorizontalAlignment),
+    typeof(MatrixOption),
+    new FrameworkPropertyMetadata(
+            HorizontalAlignment.Left, OnInternalPropertyChanged)
+);
+
+public  static  readonly  DependencyProperty  TextPaddingProperty =
+DependencyProperty.Register(
+    nameof(TextPadding), typeof(Thickness), typeof(MatrixOption),
+    new FrameworkPropertyMetadata(
+            new Thickness(8, 0, 8, 0), OnInternalPropertyChanged)
+);
+
+public  static  readonly  DependencyProperty  VerticalTextAlignProperty =
+DependencyProperty.Register(
+    nameof(VerticalTextAlign), typeof(VerticalAlignment),
+    typeof(MatrixOption),
+    new FrameworkPropertyMetadata(
+            VerticalAlignment.Center, OnInternalPropertyChanged)
 );
 
 

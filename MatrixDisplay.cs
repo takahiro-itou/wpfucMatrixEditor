@@ -69,9 +69,8 @@ new  SolidColorBrush(Color.FromRgb(104, 140, 175));
 /**
 **
 **/
-
 public  double
-getColWidth(int c)
+GetColWidth(int c)
 {
     IList<double>   colSize = this.Layouts.ColumnWidths;
     return ( (colSize != null && c < colSize.Count)
@@ -84,7 +83,7 @@ getColWidth(int c)
 **/
 
 public  double
-getRowHeight(int r)
+GetRowHeight(int r)
 {
     IList<double>   rowSize = this.Layouts.RowHeights;
     return ( (rowSize != null && r < rowSize.Count)
@@ -190,7 +189,7 @@ public  static  readonly  DependencyProperty  LayoutsProperty =
 DependencyProperty.Register(
     nameof(Layouts), typeof(MatrixLayout), typeof(MatrixDisplay),
     new FrameworkPropertyMetadata(
-            null, AFFECTS_RENDER, OnLayoutsChanged, coerceLayouts)
+            null, AFFECTS_RENDER, OnLayoutsChanged, CoerceLayouts)
 );
 
 
@@ -204,7 +203,7 @@ public  static  readonly  DependencyProperty  OptionsProperty =
 DependencyProperty.Register(
     nameof(Options), typeof(MatrixOption), typeof(MatrixDisplay),
     new FrameworkPropertyMetadata(
-            null, AFFECTS_RENDER, OnOptionsChanged, coerceOptions)
+            null, AFFECTS_RENDER, OnOptionsChanged, CoerceOptions)
 );
 
 public  static  readonly  DependencyProperty  RowsProperty =
@@ -230,10 +229,10 @@ MeasureOverride(
 {
     //  列数や幅データが変わっていたら位置キャッシュを更新  //
     if ( this.m_colPos.Count != Columns ) {
-        updateColumnPositions();
+        UpdateColPositions();
     }
     if ( this.m_rowPos.Count != Rows ) {
-        updateRowPositions();
+        UpdateRowPositions();
     }
 
     return  base.MeasureOverride(availableSize);
@@ -269,14 +268,15 @@ OnRender(System.Windows.Media.DrawingContext  dc)
     );
 
     if ( this.MatrixData == null || Rows <= 0 || Columns <= 0) {
+        dc.Pop();
         return;
     }
 
     //  表示範囲を計算。    /
-    int startCol = getColumnIndexAtX(HorizontalOffset);
-    int startRow = getRowIndexAtY(VerticalOffset);
-    int endCol  = getColumnIndexAtX(HorizontalOffset + ViewportWidth);
-    int endRow  = getRowIndexAtY(VerticalOffset + ViewportHeight);
+    int startCol = GetColIndexAtX(HorizontalOffset);
+    int startRow = GetRowIndexAtY(VerticalOffset);
+    int endCol  = GetColIndexAtX(HorizontalOffset + ViewportWidth);
+    int endRow  = GetRowIndexAtY(VerticalOffset + ViewportHeight);
 
     Typeface typeface = new Typeface(
             SystemFonts.CaptionFontFamily,
@@ -287,7 +287,7 @@ OnRender(System.Windows.Media.DrawingContext  dc)
     for ( int r = startRow; r <= endRow; ++ r ) {
         double  absoluteY = this.m_rowPos[r];
         double  y = absoluteY - VerticalOffset + 1.0;
-        double  rH  = getRowHeight(r);
+        double  rH  = GetRowHeight(r);
 
         for ( int c = startCol; c <= endCol; ++ c ) {
             int index = r * Columns + c;
@@ -299,10 +299,16 @@ OnRender(System.Windows.Media.DrawingContext  dc)
             //  セルの左上座標  //
             double  absoluteX = this.m_colPos[c];
             double  x = absoluteX - HorizontalOffset + 1.0;
-            double  cW  = getColWidth(c);
+            double  cW  = GetColWidth(c);
 
             Brush   bgBrush = dat.BgBrush ?? Brushes.White;
             Brush   fgBrush = dat.FgBrush ?? Brushes.Black;
+
+            Thickness   celPad  = dat.TextPadding ?? this.Options.TextPadding;
+            HorizontalAlignment  hAlign =
+                dat.HorizontalTextAlign ?? this.Options.HorizontalTextAlign;
+            VerticalAlignment    vAlign =
+                dat.VerticalTextAlign ?? this.Options.VerticalTextAlign;
 
             dc.DrawRectangle(
                      bgBrush, gridPen, new Rect(x, y, cW, rH));
@@ -314,10 +320,52 @@ OnRender(System.Windows.Media.DrawingContext  dc)
                     fontSize,
                     fgBrush,
                     VisualTreeHelper.GetDpi(this).PixelsPerDip);
-            //  中央揃えの座標計算。    //
-            double textX = x + (cW - formattedText.Width ) / 2;
-            double textY = y + (rH - formattedText.Height) / 2;
+
+            //  パディングと配置を考慮して描画位置を計算。  //
+            double  inX  = x + celPad.Left;
+            double  inY  = y + celPad.Top;
+            double  inW  = cW - (celPad.Left + celPad.Right);
+            double  inH  = rH - (celPad.Top + celPad.Bottom);
+
+            if ( inW < 0 ) { inW = 0; }
+            if ( inH < 0 ) { inH = 0; }
+
+            double  textX = inX;
+            double  textY = inY;
+
+            switch ( hAlign ) {
+            case  HorizontalAlignment.Center:
+                textX = inX + (inW - formattedText.Width) / 2;
+                break;
+            case  HorizontalAlignment.Right:
+                textX = inX + (inW - formattedText.Width);
+                break;
+            case  HorizontalAlignment.Stretch:
+            case  HorizontalAlignment.Left:
+            default:
+                textX = inX;
+                break;
+            }
+
+            switch ( vAlign ) {
+            case  VerticalAlignment.Center:
+                textY = inY + (inH - formattedText.Height) / 2;
+                break;
+            case  VerticalAlignment.Bottom:
+                textY = inY + (inH - formattedText.Height);
+                break;
+            case  VerticalAlignment.Stretch:
+            case  VerticalAlignment.Top:
+            default:
+                textY = inY;
+                break;
+            }
+
+            dc.PushClip(new RectangleGeometry(
+                new Rect(x + 0.5, y + 0.5, cW - 1.0, rH - 1.0)
+            ));
             dc.DrawText(formattedText, new Point(textX, textY));
+            dc.Pop();
         }
     }
 
@@ -339,8 +387,8 @@ OnRender(System.Windows.Media.DrawingContext  dc)
 private  void
 OnOptionsPropertyChanged(object? sender, EventArgs e)
 {
-    this.updateRowPositions();
-    this.updateColumnPositions();
+    this.UpdateRowPositions();
+    this.UpdateColPositions();
 
     this.InvalidateMeasure();
     this.InvalidateVisual();
@@ -352,7 +400,7 @@ OnOptionsPropertyChanged(object? sender, EventArgs e)
 **/
 
 private  static  int
-getIndexFromCache(
+GetIndexFromCache(
         List<double>    posCache,
         double          val,
         int             num)
@@ -367,20 +415,20 @@ getIndexFromCache(
 }
 
 private  int
-getColumnIndexAtX(double  x)
+GetColIndexAtX(double  x)
 {
-    return  getIndexFromCache(this.m_colPos, x, this.Columns);
+    return  GetIndexFromCache(this.m_colPos, x, this.Columns);
 }
 
 private  int
-getRowIndexAtY(double  y)
+GetRowIndexAtY(double  y)
 {
-    return  getIndexFromCache(this.m_rowPos, y, this.Rows);
+    return  GetIndexFromCache(this.m_rowPos, y, this.Rows);
 }
 
 
 private  static  object
-coerceLayouts(DependencyObject d, object baseValue)
+CoerceLayouts(DependencyObject d, object baseValue)
 {
     if ( baseValue == null ) {
         return  new MatrixLayout();
@@ -389,7 +437,7 @@ coerceLayouts(DependencyObject d, object baseValue)
 }
 
 private  static  object
-coerceOptions(DependencyObject d, object baseValue)
+CoerceOptions(DependencyObject d, object baseValue)
 {
     if ( baseValue == null ) {
         return  new MatrixOption();
@@ -403,7 +451,7 @@ OnColumnWidthsChanged(
         DependencyObject                    d,
         DependencyPropertyChangedEventArgs  e)
 {
-    ((MatrixDisplay)d).updateColumnPositions();
+    ((MatrixDisplay)d).UpdateColPositions();
 }
 
 
@@ -443,7 +491,7 @@ OnRowHeightsChanged(
         DependencyObject                    d,
         DependencyPropertyChangedEventArgs  e)
 {
-    ((MatrixDisplay)d).updateRowPositions();
+    ((MatrixDisplay)d).UpdateRowPositions();
 }
 
 
@@ -453,7 +501,7 @@ OnRowHeightsChanged(
 **/
 
 private  void
-updateColumnPositions()
+UpdateColPositions()
 {
     this.m_colPos.Clear();
     int     numCols = this.Columns;
@@ -461,14 +509,14 @@ updateColumnPositions()
 
     for ( int c = 0; c < numCols; ++ c ) {
         this.m_colPos.Add(current);
-        double  w = getColWidth(c);
+        double  w = GetColWidth(c);
         current += w;
     }
     this.m_totalWidth   = current;
 }
 
 private  void
-updateRowPositions()
+UpdateRowPositions()
 {
     this.m_rowPos.Clear();
     int     numRows = this.Rows;
@@ -476,7 +524,7 @@ updateRowPositions()
 
     for ( int r = 0; r < numRows; ++ r ) {
         this.m_rowPos.Add(current);
-        double  h = getRowHeight(r);
+        double  h = GetRowHeight(r);
         current += h;
     }
     this.m_totalHeight  = current;

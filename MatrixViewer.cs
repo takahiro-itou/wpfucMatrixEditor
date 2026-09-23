@@ -56,7 +56,7 @@ OnApplyTemplate()
     base.OnApplyTemplate();
 
     this.m_mdPart = GetTemplateChild("PART_MatrixDisplay") as MatrixDisplay;
-    updateInternalData();
+    this.UpdateInternalData();
 }
 
 
@@ -170,12 +170,12 @@ OnMatrixDataChanged(
         DependencyPropertyChangedEventArgs  e)
 {
     if ( d is MatrixViewer owner ) {
-        owner.updateInternalData();
+        owner.UpdateInternalData();
     }
 }
 
 private  void
-updateInternalData()
+UpdateInternalData()
 {
     if ( this.m_mdPart == null ) { return; }
 
