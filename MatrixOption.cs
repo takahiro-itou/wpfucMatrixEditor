@@ -65,7 +65,7 @@ public  Brush  GridBgBrush  {
 
 public  Color  GridBgColor  {
     get => (GridBgBrush is SolidColorBrush scb) ? scb.Color : Colors.White;
-    set { GridBgBrush = BrushCache.getBrush(value); }
+    set { GridBgBrush = BrushCache.GetBrush(value); }
 }
 
 public  Brush  GridLine  {
