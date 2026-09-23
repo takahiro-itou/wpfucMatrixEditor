@@ -75,8 +75,15 @@ public  Brush  GridLine  {
 
 
 public  HorizontalAlignment  HorizontalTextAlign  {
-    get { return  (HorizontalAlignment)GetValue(HorizontalTextAlignProperty); }
+    get {
+        return  (HorizontalAlignment)GetValue(HorizontalTextAlignProperty);
+    }
     set { SetValue(HorizontalTextAlignProperty, value); }
+}
+
+public  Thickness  TextPadding  {
+    get { return  (Thickness)GetValue(TextPaddingProperty); }
+    set { SetValue(TextPaddingProperty, value); }
 }
 
 public  VerticalAlignment  VerticalTextAlign  {
@@ -129,6 +136,13 @@ DependencyProperty.Register(
     typeof(MatrixOption),
     new FrameworkPropertyMetadata(
             HorizontalAlignment.Left, OnInternalPropertyChanged)
+);
+
+public  static  readonly  DependencyProperty  TextPaddingProperty =
+DependencyProperty.Register(
+    nameof(TextPadding), typeof(Thickness), typeof(MatrixOption),
+    new FrameworkPropertyMetadata(
+            new Thickness(8, 0, 8, 0), OnInternalPropertyChanged)
 );
 
 public  static  readonly  DependencyProperty  VerticalTextAlignProperty =
