@@ -45,6 +45,9 @@ public  MatrixDisplay()
     //  デバイスの物理ピクセルに配置を強制する  //
     this.SnapsToDevicePixels  = true;
     this.UseLayoutRounding    = true;
+
+    this.m_flagColCacheEnabled  = false;
+    this.m_flagRowCacheEnabled  = false;
 }
 
 
@@ -222,19 +225,12 @@ DependencyProperty.RegisterAttached(
 /**
 **
 **/
-
 protected  override  System.Windows.Size
 MeasureOverride(
         System.Windows.Size     availableSize)
 {
-    //  列数や幅データが変わっていたら位置キャッシュを更新  //
-    if ( this.m_colPos.Count != Columns ) {
-        UpdateColPositions();
-    }
-    if ( this.m_rowPos.Count != Rows ) {
-        UpdateRowPositions();
-    }
-
+    UpdateColPositions();
+    UpdateRowPositions();
     return  base.MeasureOverride(availableSize);
 }
 
@@ -244,7 +240,6 @@ MeasureOverride(
 **
 **  @param [in] dc    Drawing Context
 **/
-
 protected  override  void
 OnRender(System.Windows.Media.DrawingContext  dc)
 {
@@ -451,8 +446,15 @@ GetRowIndexAtY(double  y)
 **
 **/
 private  void
-UpdateColPositions()
+UpdateColPositions(
+        System.Boolean  bForce  = false)
 {
+    //  列数や幅データが変わっていたら位置キャッシュを更新  //
+    if ( this.m_colPos.Count != this.Columns ) {
+        this.m_flagColCacheEnabled  = false;
+    }
+    if ( this.m_flagColCacheEnabled && ! bForce ) { return; }
+
     this.m_colPos.Clear();
     int     numCols = this.Columns;
     double  current = 0;
@@ -463,11 +465,23 @@ UpdateColPositions()
         current += w;
     }
     this.m_totalWidth   = current;
+
+    this.m_flgColCacheEnabled   = true;
 }
 
+//----------------------------------------------------------------
+/**
+**
+**/
 private  void
-UpdateRowPositions()
+UpdateRowPositions(
+        System.Boolean  bForce  = false)
 {
+    if ( this.m_rowPos.Count != this.Rows ) {
+        this.m_flagRowCacheEnabled  = false;
+    }
+    if ( this.m_flagRowCacheEnabled && ! bForce ) { return; }
+
     this.m_rowPos.Clear();
     int     numRows = this.Rows;
     double  current = 0;
@@ -478,6 +492,8 @@ UpdateRowPositions()
         current += h;
     }
     this.m_totalHeight  = current;
+
+    this.m_flagRowCacheEnabled  = true;
 }
 
 //========================================================================
@@ -521,7 +537,7 @@ OnColumnWidthsChanged(
         DependencyObject                    d,
         DependencyPropertyChangedEventArgs  e)
 {
-    ((MatrixDisplay)d).UpdateColPositions();
+    ((MatrixDisplay)d).UpdateColPositions(true);
 }
 
 //----------------------------------------------------------------
@@ -575,7 +591,7 @@ OnRowHeightsChanged(
         DependencyObject                    d,
         DependencyPropertyChangedEventArgs  e)
 {
-    ((MatrixDisplay)d).UpdateRowPositions();
+    ((MatrixDisplay)d).UpdateRowPositions(true);
 }
 
 
@@ -584,11 +600,14 @@ OnRowHeightsChanged(
 //    Member Variables.
 //
 
-private   List<double>   m_colPos = new List<double>();
-private   List<double>   m_rowPos = new List<double>();
+private   List<double>      m_colPos = new List<double>();
+private   List<double>      m_rowPos = new List<double>();
 
-private   double         m_totalWidth;
-private   double         m_totalHeight;
+private   double            m_totalWidth;
+private   double            m_totalHeight;
+
+private   System.Boolean    m_flagColCacheEnabled;
+private   System.Boolean    m_flagRowCacheEnabled;
 
 
 }   //  End op class  MatrixDisplay
