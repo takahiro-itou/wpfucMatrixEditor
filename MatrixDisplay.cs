@@ -380,12 +380,13 @@ OnRender(System.Windows.Media.DrawingContext  dc)
 //
 
 //----------------------------------------------------------------
-/**
+/**   Layouts 内のプロパティが変化した時の処理。
 **
+**    Layouts プロパティのインスタンス（参照）は変化しないが、
+**  そのインスタンスの中身が変更された場合の処理。
 **/
-
 private  void
-OnOptionsPropertyChanged(object? sender, EventArgs e)
+OnLayoutsPropertyChanged(object? sender, EventArgs e)
 {
     this.UpdateRowPositions();
     this.UpdateColPositions();
@@ -395,10 +396,21 @@ OnOptionsPropertyChanged(object? sender, EventArgs e)
 }
 
 //----------------------------------------------------------------
+/**   Options 内のプロパティが変化した時の処理。
+**
+**    Options プロパティのインスタンス（参照）は変化しないが、
+**  そのインスタンスの中身が変更された場合の処理。
+**/
+private  void
+OnOptionsPropertyChanged(object? sender, EventArgs e)
+{
+    this.InvalidateVisual();
+}
+
+//----------------------------------------------------------------
 /**
 **
 **/
-
 private  static  int
 GetIndexFromCache(
         List<double>    posCache,
@@ -414,92 +426,30 @@ GetIndexFromCache(
     return  Math.Max(0, Math.Min(index, num - 1));
 }
 
+//----------------------------------------------------------------
+/**
+**
+**/
 private  int
 GetColIndexAtX(double  x)
 {
     return  GetIndexFromCache(this.m_colPos, x, this.Columns);
 }
 
+//----------------------------------------------------------------
+/**
+**
+**/
 private  int
 GetRowIndexAtY(double  y)
 {
     return  GetIndexFromCache(this.m_rowPos, y, this.Rows);
 }
 
-
-private  static  object
-CoerceLayouts(DependencyObject d, object baseValue)
-{
-    if ( baseValue == null ) {
-        return  new MatrixLayout();
-    }
-    return ( baseValue );
-}
-
-private  static  object
-CoerceOptions(DependencyObject d, object baseValue)
-{
-    if ( baseValue == null ) {
-        return  new MatrixOption();
-    }
-    return ( baseValue );
-}
-
-
-private  static  void
-OnColumnWidthsChanged(
-        DependencyObject                    d,
-        DependencyPropertyChangedEventArgs  e)
-{
-    ((MatrixDisplay)d).UpdateColPositions();
-}
-
-
-private  static  void
-OnLayoutsChanged(
-        DependencyObject                    d,
-        DependencyPropertyChangedEventArgs  e)
-{
-    if ( d is MatrixDisplay display ) {
-        if ( e.OldValue is MatrixLayout oldLayouts ) {
-            oldLayouts.PropertyChanged -= display.OnOptionsPropertyChanged;
-        }
-        if ( e.NewValue is MatrixLayout newLayouts ) {
-            newLayouts.PropertyChanged += display.OnOptionsPropertyChanged;
-       }
-    }
-}
-
-
-private  static  void
-OnOptionsChanged(
-        DependencyObject                    d,
-        DependencyPropertyChangedEventArgs  e)
-{
-    if ( d is MatrixDisplay display ) {
-        if ( e.OldValue is MatrixOption oldOptions ) {
-            oldOptions.PropertyChanged -= display.OnOptionsPropertyChanged;
-        }
-        if ( e.NewValue is MatrixOption newOptions ) {
-            newOptions.PropertyChanged += display.OnOptionsPropertyChanged;
-       }
-    }
-}
-
-private  static  void
-OnRowHeightsChanged(
-        DependencyObject                    d,
-        DependencyPropertyChangedEventArgs  e)
-{
-    ((MatrixDisplay)d).UpdateRowPositions();
-}
-
-
 //----------------------------------------------------------------
 /**
 **
 **/
-
 private  void
 UpdateColPositions()
 {
@@ -528,6 +478,104 @@ UpdateRowPositions()
         current += h;
     }
     this.m_totalHeight  = current;
+}
+
+//========================================================================
+//
+//    For Internal Use Only (Static Members).
+//
+
+//----------------------------------------------------------------
+/**
+**
+**/
+private  static  object
+CoerceLayouts(DependencyObject d, object baseValue)
+{
+    if ( baseValue == null ) {
+        return  new MatrixLayout();
+    }
+    return ( baseValue );
+}
+
+//----------------------------------------------------------------
+/**
+**
+**/
+private  static  object
+CoerceOptions(DependencyObject d, object baseValue)
+{
+    if ( baseValue == null ) {
+        return  new MatrixOption();
+    }
+    return ( baseValue );
+}
+
+
+//----------------------------------------------------------------
+/**
+**
+**/
+private  static  void
+OnColumnWidthsChanged(
+        DependencyObject                    d,
+        DependencyPropertyChangedEventArgs  e)
+{
+    ((MatrixDisplay)d).UpdateColPositions();
+}
+
+//----------------------------------------------------------------
+/**   Layouts プロパティ自体が丸々交換されたときの処理
+**
+**    Layouts プロパティにセットされていたインスタンスが、
+**  別のインスタンスを参照するよう変更された場合の処理。
+**/
+private  static  void
+OnLayoutsChanged(
+        DependencyObject                    d,
+        DependencyPropertyChangedEventArgs  e)
+{
+    if ( d is MatrixDisplay display ) {
+        if ( e.OldValue is MatrixLayout oldLayouts ) {
+            oldLayouts.PropertyChanged -= display.OnLayoutsPropertyChanged;
+        }
+        if ( e.NewValue is MatrixLayout newLayouts ) {
+            newLayouts.PropertyChanged += display.OnLayoutsPropertyChanged;
+       }
+    }
+}
+
+//----------------------------------------------------------------
+/**   Options プロパティ自体が丸々交換されたときの処理
+**
+**    Options プロパティにセットされていたインスタンスが、
+**  別のインスタンスを参照するよう変更された場合の処理。
+**/
+private  static  void
+OnOptionsChanged(
+        DependencyObject                    d,
+        DependencyPropertyChangedEventArgs  e)
+{
+    if ( d is MatrixDisplay display ) {
+        if ( e.OldValue is MatrixOption oldOptions ) {
+            oldOptions.PropertyChanged -= display.OnOptionsPropertyChanged;
+        }
+        if ( e.NewValue is MatrixOption newOptions ) {
+            newOptions.PropertyChanged += display.OnOptionsPropertyChanged;
+       }
+    }
+}
+
+//----------------------------------------------------------------
+/**
+**
+**/
+private  static  void
+OnRowHeightsChanged(
+        DependencyObject                    d,
+        DependencyPropertyChangedEventArgs  e)
+{
+    ((MatrixDisplay)d).UpdateRowPositions();
 }
 
 
