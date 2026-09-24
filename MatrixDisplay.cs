@@ -466,7 +466,7 @@ UpdateColPositions(
     }
     this.m_totalWidth   = current;
 
-    this.m_flgColCacheEnabled   = true;
+    this.m_flagColCacheEnabled  = true;
 }
 
 //----------------------------------------------------------------
