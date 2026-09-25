@@ -383,8 +383,8 @@ OnRender(System.Windows.Media.DrawingContext  dc)
 private  void
 OnLayoutsPropertyChanged(object? sender, EventArgs e)
 {
-    this.UpdateRowPositions();
-    this.UpdateColPositions();
+    this.UpdateRowPositions(true);
+    this.UpdateColPositions(true);
 
     this.InvalidateMeasure();
     this.InvalidateVisual();
