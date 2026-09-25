@@ -251,16 +251,7 @@ OnRender(System.Windows.Media.DrawingContext  dc)
     ));
 
     //  背景塗りつぶし  //
-    Pen penBorder = new Pen(this.Options.BorderLine, 1.0);
-
-    dc.DrawRectangle(
-            this.Options.Background,
-            penBorder,
-            new Rect(
-                0.5,  0.5,
-                this.ViewportWidth  - 1.0,
-                this.ViewportHeight - 1.0)
-    );
+    RenderBackground(dc);
 
     if ( this.MatrixData == null || Rows <= 0 || Columns <= 0) {
         dc.Pop();
@@ -366,6 +357,26 @@ OnRender(System.Windows.Media.DrawingContext  dc)
 
     dc.Pop();   //  クリップの解除  //
     return;
+}
+
+//----------------------------------------------------------------
+/**   背景を描画する。
+**
+**/
+protected  virtual  void
+RenderBackground(
+        System.Windows.Media.DrawingContext dc)
+{
+    Pen penBorder = new Pen(this.Options.BorderLine, 1.0);
+
+    dc.DrawRectangle(
+            this.Options.Background,
+            penBorder,
+            new Rect(
+                0.5,  0.5,
+                this.ViewportWidth  - 1.0,
+                this.ViewportHeight - 1.0)
+    );
 }
 
 
