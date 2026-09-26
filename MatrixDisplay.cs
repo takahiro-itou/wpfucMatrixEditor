@@ -45,6 +45,9 @@ public  MatrixDisplay()
     //  デバイスの物理ピクセルに配置を強制する  //
     this.SnapsToDevicePixels  = true;
     this.UseLayoutRounding    = true;
+
+    this.m_flagColCacheEnabled  = false;
+    this.m_flagRowCacheEnabled  = false;
 }
 
 
@@ -222,19 +225,12 @@ DependencyProperty.RegisterAttached(
 /**
 **
 **/
-
 protected  override  System.Windows.Size
 MeasureOverride(
         System.Windows.Size     availableSize)
 {
-    //  列数や幅データが変わっていたら位置キャッシュを更新  //
-    if ( this.m_colPos.Count != Columns ) {
-        UpdateColPositions();
-    }
-    if ( this.m_rowPos.Count != Rows ) {
-        UpdateRowPositions();
-    }
-
+    UpdateColPositions();
+    UpdateRowPositions();
     return  base.MeasureOverride(availableSize);
 }
 
@@ -244,7 +240,6 @@ MeasureOverride(
 **
 **  @param [in] dc    Drawing Context
 **/
-
 protected  override  void
 OnRender(System.Windows.Media.DrawingContext  dc)
 {
@@ -256,16 +251,7 @@ OnRender(System.Windows.Media.DrawingContext  dc)
     ));
 
     //  背景塗りつぶし  //
-    Pen penBorder = new Pen(this.Options.BorderLine, 1.0);
-
-    dc.DrawRectangle(
-            this.Options.Background,
-            penBorder,
-            new Rect(
-                0.5,  0.5,
-                this.ViewportWidth  - 1.0,
-                this.ViewportHeight - 1.0)
-    );
+    RenderBackground(dc);
 
     if ( this.MatrixData == null || Rows <= 0 || Columns <= 0) {
         dc.Pop();
@@ -373,6 +359,26 @@ OnRender(System.Windows.Media.DrawingContext  dc)
     return;
 }
 
+//----------------------------------------------------------------
+/**   背景を描画する。
+**
+**/
+protected  virtual  void
+RenderBackground(
+        System.Windows.Media.DrawingContext dc)
+{
+    Pen penBorder = new Pen(this.Options.BorderLine, 1.0);
+
+    dc.DrawRectangle(
+            this.Options.Background,
+            penBorder,
+            new Rect(
+                0.5,  0.5,
+                this.ViewportWidth  - 1.0,
+                this.ViewportHeight - 1.0)
+    );
+}
+
 
 //========================================================================
 //
@@ -380,17 +386,30 @@ OnRender(System.Windows.Media.DrawingContext  dc)
 //
 
 //----------------------------------------------------------------
-/**
+/**   Layouts 内のプロパティが変化した時の処理。
 **
+**    Layouts プロパティのインスタンス（参照）は変化しないが、
+**  そのインスタンスの中身が変更された場合の処理。
 **/
+private  void
+OnLayoutsPropertyChanged(object? sender, EventArgs e)
+{
+    this.UpdateRowPositions(true);
+    this.UpdateColPositions(true);
 
+    this.InvalidateMeasure();
+    this.InvalidateVisual();
+}
+
+//----------------------------------------------------------------
+/**   Options 内のプロパティが変化した時の処理。
+**
+**    Options プロパティのインスタンス（参照）は変化しないが、
+**  そのインスタンスの中身が変更された場合の処理。
+**/
 private  void
 OnOptionsPropertyChanged(object? sender, EventArgs e)
 {
-    this.UpdateRowPositions();
-    this.UpdateColPositions();
-
-    this.InvalidateMeasure();
     this.InvalidateVisual();
 }
 
@@ -398,7 +417,6 @@ OnOptionsPropertyChanged(object? sender, EventArgs e)
 /**
 **
 **/
-
 private  static  int
 GetIndexFromCache(
         List<double>    posCache,
@@ -414,19 +432,90 @@ GetIndexFromCache(
     return  Math.Max(0, Math.Min(index, num - 1));
 }
 
+//----------------------------------------------------------------
+/**
+**
+**/
 private  int
 GetColIndexAtX(double  x)
 {
     return  GetIndexFromCache(this.m_colPos, x, this.Columns);
 }
 
+//----------------------------------------------------------------
+/**
+**
+**/
 private  int
 GetRowIndexAtY(double  y)
 {
     return  GetIndexFromCache(this.m_rowPos, y, this.Rows);
 }
 
+//----------------------------------------------------------------
+/**
+**
+**/
+private  void
+UpdateColPositions(
+        System.Boolean  bForce  = false)
+{
+    //  列数や幅データが変わっていたら位置キャッシュを更新  //
+    if ( this.m_colPos.Count != this.Columns ) {
+        this.m_flagColCacheEnabled  = false;
+    }
+    if ( this.m_flagColCacheEnabled && ! bForce ) { return; }
 
+    this.m_colPos.Clear();
+    int     numCols = this.Columns;
+    double  current = 0;
+
+    for ( int c = 0; c < numCols; ++ c ) {
+        this.m_colPos.Add(current);
+        double  w = GetColWidth(c);
+        current += w;
+    }
+    this.m_totalWidth   = current;
+
+    this.m_flagColCacheEnabled  = true;
+}
+
+//----------------------------------------------------------------
+/**
+**
+**/
+private  void
+UpdateRowPositions(
+        System.Boolean  bForce  = false)
+{
+    if ( this.m_rowPos.Count != this.Rows ) {
+        this.m_flagRowCacheEnabled  = false;
+    }
+    if ( this.m_flagRowCacheEnabled && ! bForce ) { return; }
+
+    this.m_rowPos.Clear();
+    int     numRows = this.Rows;
+    double  current = 0;
+
+    for ( int r = 0; r < numRows; ++ r ) {
+        this.m_rowPos.Add(current);
+        double  h = GetRowHeight(r);
+        current += h;
+    }
+    this.m_totalHeight  = current;
+
+    this.m_flagRowCacheEnabled  = true;
+}
+
+//========================================================================
+//
+//    For Internal Use Only (Static Members).
+//
+
+//----------------------------------------------------------------
+/**
+**
+**/
 private  static  object
 CoerceLayouts(DependencyObject d, object baseValue)
 {
@@ -436,6 +525,10 @@ CoerceLayouts(DependencyObject d, object baseValue)
     return ( baseValue );
 }
 
+//----------------------------------------------------------------
+/**
+**
+**/
 private  static  object
 CoerceOptions(DependencyObject d, object baseValue)
 {
@@ -446,15 +539,24 @@ CoerceOptions(DependencyObject d, object baseValue)
 }
 
 
+//----------------------------------------------------------------
+/**
+**
+**/
 private  static  void
 OnColumnWidthsChanged(
         DependencyObject                    d,
         DependencyPropertyChangedEventArgs  e)
 {
-    ((MatrixDisplay)d).UpdateColPositions();
+    ((MatrixDisplay)d).UpdateColPositions(true);
 }
 
-
+//----------------------------------------------------------------
+/**   Layouts プロパティ自体が丸々交換されたときの処理
+**
+**    Layouts プロパティにセットされていたインスタンスが、
+**  別のインスタンスを参照するよう変更された場合の処理。
+**/
 private  static  void
 OnLayoutsChanged(
         DependencyObject                    d,
@@ -462,15 +564,20 @@ OnLayoutsChanged(
 {
     if ( d is MatrixDisplay display ) {
         if ( e.OldValue is MatrixLayout oldLayouts ) {
-            oldLayouts.PropertyChanged -= display.OnOptionsPropertyChanged;
+            oldLayouts.PropertyChanged -= display.OnLayoutsPropertyChanged;
         }
         if ( e.NewValue is MatrixLayout newLayouts ) {
-            newLayouts.PropertyChanged += display.OnOptionsPropertyChanged;
+            newLayouts.PropertyChanged += display.OnLayoutsPropertyChanged;
        }
     }
 }
 
-
+//----------------------------------------------------------------
+/**   Options プロパティ自体が丸々交換されたときの処理
+**
+**    Options プロパティにセットされていたインスタンスが、
+**  別のインスタンスを参照するよう変更された場合の処理。
+**/
 private  static  void
 OnOptionsChanged(
         DependencyObject                    d,
@@ -486,48 +593,16 @@ OnOptionsChanged(
     }
 }
 
+//----------------------------------------------------------------
+/**
+**
+**/
 private  static  void
 OnRowHeightsChanged(
         DependencyObject                    d,
         DependencyPropertyChangedEventArgs  e)
 {
-    ((MatrixDisplay)d).UpdateRowPositions();
-}
-
-
-//----------------------------------------------------------------
-/**
-**
-**/
-
-private  void
-UpdateColPositions()
-{
-    this.m_colPos.Clear();
-    int     numCols = this.Columns;
-    double  current = 0;
-
-    for ( int c = 0; c < numCols; ++ c ) {
-        this.m_colPos.Add(current);
-        double  w = GetColWidth(c);
-        current += w;
-    }
-    this.m_totalWidth   = current;
-}
-
-private  void
-UpdateRowPositions()
-{
-    this.m_rowPos.Clear();
-    int     numRows = this.Rows;
-    double  current = 0;
-
-    for ( int r = 0; r < numRows; ++ r ) {
-        this.m_rowPos.Add(current);
-        double  h = GetRowHeight(r);
-        current += h;
-    }
-    this.m_totalHeight  = current;
+    ((MatrixDisplay)d).UpdateRowPositions(true);
 }
 
 
@@ -536,11 +611,14 @@ UpdateRowPositions()
 //    Member Variables.
 //
 
-private   List<double>   m_colPos = new List<double>();
-private   List<double>   m_rowPos = new List<double>();
+private   List<double>      m_colPos = new List<double>();
+private   List<double>      m_rowPos = new List<double>();
 
-private   double         m_totalWidth;
-private   double         m_totalHeight;
+private   double            m_totalWidth;
+private   double            m_totalHeight;
+
+private   System.Boolean    m_flagColCacheEnabled;
+private   System.Boolean    m_flagRowCacheEnabled;
 
 
 }   //  End op class  MatrixDisplay
